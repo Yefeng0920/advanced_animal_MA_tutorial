@@ -136,13 +136,15 @@ estimates.CI <- function(model){
 
 # Why animal meta-analyses need advanced models
 
-We profiled the current practices of meta-analyses using animal data by mapping the reporting practices, statistical issues and statistical approaches from papers published over the last 10 years (2011 – 2021; see survey results in a [Github repository](https://github.com/mlagisz/survey_neurobiology_MA/tree/main/source)). Animal meta-analyses often combine studies with different species or strains, experimental designs (e.g., different dosages and sex of the animal), multiple outcomes, multiple trials, each with multiple arms. These complex animal data structures often bring two statistical issues: **statistical dependence** and **multiple sources of heterogeneity**. Researchers in animal meta-analyses mainly use traditional meta-analytic techniques (i.e., fixed- and random-effects models) for evidence synthesis. However, the use of traditional meta-analytic techniques are very limited in addressing the two issues, which may lead to unreliable meta-analytic evidence (e.g., inflation of p-value) and limit our ability to provide novel meta-analytic insights into a given research field.
+We profiled the current practices of meta-analyses of animal data by mapping the reporting practices, statistical issues and statistical approaches from papers published over the last 10 years (2011 – 2021; see survey results in a [Github repository mlagisz/survey_neurobiology_MA](https://github.com/mlagisz/survey_neurobiology_MA/tree/main/source)). Animal meta-analyses often combine studies on different species or strains, experimental designs (e.g., different dosages or sex of the animals), multiple outcomes, multiple trials, each with multiple arms. These complex data structures often result in two statistical issues: **statistical dependence** and **multiple sources of heterogeneity**. Researchers in animal meta-analyses mainly use traditional meta-analytic techniques (i.e., fixed- and random-effects models), which are very limited in addressing the two issues. resulting unreliable meta-analytic evidence (e.g., inflation of p-value) can undermine our ability to provide robust meta-analytic insights.   
 
-Formulating meta-analysis with the multilevel model framework can directly model dependence and heterogeneity. In the main text, we elaborate on the concepts, rationale, and examples of the multilevel model in the context of meta-analysis. As a complementary to the theory of the multilevel model outlined in the main text, here, we provide a easy-to-implement tutorial (with <strong>R code</strong>) to showcase how to conduct animal meta-analyses within the framework of multilevel model. We also illustrate how to implement other underappreciated methods, such as robust variance estimation. We encourage future ‘animal’ meta-analysts to modify the sample <strong>R code</strong> to undertake their own animal meta-analyses toward to draw more robust biological (neurological) inferences, new biological insights, and better animal-to-human translation (@bahadoran2020importance).
+Formulating meta-analysis within the multilevel model framework allows directly modeling dependence and heterogeneity. In the main text, we elaborate on the concepts, rationale, and examples of the multilevel model in the context of meta-analysis. To complement the theory of the multilevel model outlined in the main text, here, we provide a easy-to-implement tutorial (with <strong>R code</strong>) to showcase how to conduct animal meta-analyses within the framework of multilevel model. We also illustrate how to implement other underappreciated methods, such as robust variance estimation. We encourage meta-analysts to modify the sample <strong>R code</strong> for their own animal data meta-analyses to draw more robust biological (neurological) inferences, reveal new biological insights, and foster better animal-to-human translation (@bahadoran2020importance).   
+
+All source files for this tutorial, including Rmarkdown file with the original code can be found at  [https://github.com/Yefeng0920/advanced_animal_MA_tutorial](https://github.com/Yefeng0920/advanced_animal_MA_tutorial).    
   
-# How to implement the advanced meta-analytic techniques
+# How to implement advanced meta-analytic techniques
 
-This online tutorial contains two parts: 
+This online tutorial has two parts: 
 
 **Part I: Animal meta-analyses within the multilevel model framework** 
 
@@ -152,45 +154,43 @@ In **Part I**, we reproduce a typical animal meta-analyses conducted by @ramstei
 
 - showcase the implementation of the multilevel meta-analytic framework (sections 6 to 8 in the main text). 
 
-**Part I** consists of 5 sections. In **Section 1**, we show how to use **R coding** to fit a traditional meta-analytic model, by which we expect you to get familiar with coding/syntax based implementation of meta-analytic models and corresponding model outputs: 
+**Part I** consists of 5 sections. In **Section 1**, we show how to use **R code** to fit a traditional meta-analytic model, by which we expect you to get familiar with coding/syntax-based implementation of meta-analytic models and corresponding model outputs. By building upon the random-effects meta-analytic model (**Section 1**), we illustrate the procedures related to the use of multilevel models (**Sections 2 to 7**). We recommend researchers to employ these procedures as default analytic pipelines when conducting animal meta-analysis.   
 
-- **Section 1 – Fit a random-effects meta-analytic model**
+- **Section 1 – Fit a random-effects meta-analytic model**  
 
-By building upon the random-effects meta-analytic model (**Section 1**), we illustrate the multilevel models related procedures (**Sections 2 to 7**). We recommend researchers to employ these procedures as default analytic pipelines when conducting animal meta-analysis: 
+- **Section 2 – Fit a multilevel meta-analytic model to estimate overall pooled effect**  
 
-- **Section 2 – Fit a multilevel meta-analytic model to estimate overall pooled effect**
+- **Section 3 – Partition heterogeneity among effect sizes using the multilevel model**  
 
-- **Section 3 – Partition heterogeneity among effect size using the multilevel model**
+- **Section 4 – Fit multilevel meta-regressions to explain heterogeneity and estimate moderator effects**  
 
-- **Section 4 – Fit multilevel meta-regressions to explain heterogeneity and estimate moderator effects**
+- **Section 5 – Expand animal data meta-analysis using emerging effect sizes**  
 
-- **Section 5 – Animal meta-analysis using emerging effect sizes**
+- **Section 6 – Test publication bias**  
 
-- **Section 6 – Test publication bias**
+**Part II: Complementary analyses with other advanced methods to handle more complex animal data structures**  
 
-**Part II: Complementary analysis with other advanced methods to handle more complex animal structure** 
+In **Part II**, we use a more complex animal dataset to show the implementation of the extended methods outlined in the main text. This dataset comes from one of our published neuroscience meta-analyses (@lagisz2020optimism). Methods implemented in **Part II** are not mandatory procedures for performing an animal meta-analysis, but following them can make an animal meta-analysis statistically more sound (with more reliable model coefficients and statistical inferences). These extended methods include：  
 
-In **Part II**, we use a more complex animal dataset to show the implementation of the extended methods outlined in the main text. This dataset comes from one of our published neuroscience meta-analysis (@lagisz2020optimism). Methods implemented in **Part II** are not mandatory procedures for performing an animal meta-analysis, but following them can make an animal meta-analysis statistically more sound (more reliable model coefficients and statistical inferences). These extended methods includes： 
+- **Section 7 – Select an appropriate random-effect structure**  
 
-- **Section 7 – Select an appropriate random-effect structure**
+- **Section 8 – Fit multi-moderator multilevel meta-regression models**  
 
-- **Section 8 – Fit multi-moderator multilevel meta-regression models**
+- **Section 9 – Construct variance-covariance matrix to account for correlated/non-independent error**  
 
-- **Section 9 – Construct variance-covariance matrix to account for correlated/non-independent error**
+- **Section 10 – Make cluster-robust model inferences**  
 
-- **Section 10 – Make cluster-robust model inferences**
-
-The above sections broadly align with the order of subheadings of our main text. For each procedure within **Part I** and **Part II**, we first briefly explain the necessary **statistical concepts** and **rationale** (detailed theoretical explanations can be found in the main text). Then we use existing **R packages** and custom functions to show the implementation of each procedure.
+The above four sections broadly align with the order of subheadings of our main text. For each procedure within **Part I** and **Part II**, we first briefly explain the necessary **statistical concepts** and **rationale** (detailed theoretical explanations can be found in the main text). Then we use existing **R packages** and custom functions to show the implementation of each procedure.   
 
 
-# Section 1 – Fit a random-effect meta-analytic model {.tabset}
+# Section 1 – Fit a random-effect meta-analytic model {.tabset}  
 
-We use the animal dataset provided by @ramsteijn2020perinatal as our first worked example. This dataset comes from one of the meta-analyses included in our survey (@ramsteijn2020perinatal), where the authors examined the effect of perinatal selective serotonin re-uptake inhibitor (SSRI) exposure on behavioural phenotype of animals (e.g., exploration, learning, stress copying, social behaviour, sensory processing). We choose one of the subsets (sensory processing) to show the implementation. 
+We use the animal dataset provided by @ramsteijn2020perinatal for our first worked example. This dataset comes from one of the meta-analyses included in our survey (@ramsteijn2020perinatal), where the authors examined the effect of perinatal selective serotonin re-uptake inhibitor (SSRI) exposure on behavioural phenotypes of animals (e.g., exploration, learning, stress copying, social behaviour, sensory processing). We choose one of the outcome data subsets (sensory processing) to show the implementation of recommended procedures.  
 
-## 1.1 Load the dataset of Ramsteijn et al. (2020)
+## 1.1 Load the dataset of Ramsteijn et al. (2020)  
 
-### Table S1
-The corresponding coded variables in the worked example (@ramsteijn2020perinatal). 
+### Table S1  
+The corresponding coded variables in the worked example (@ramsteijn2020perinatal).  
 
 ```{r, cache = FALSE}
 ### import dataset
@@ -215,11 +215,11 @@ t1
 #   kableExtra::kable_styling("striped", position = "left")
 ```
 
-As shown in Table S1, this dataset included 12 primary studies containing 17 effect sizes. The ratio of the number of observations / effect sizes (*k*) to the number of studies (*N*) implies that this dataset suffers from statistical dependence: *k* = `r nrow(dat_sensory)` effect sizes, *N* = `r length(unique(dat_sensory$Study_ID))` unique primary studies,  *k/N* = `r nrow(dat_sensory) / length(unique(dat_sensory$Study_ID))`. This indicates that most studies in this meta-analysis contributed more than one effect size. Moreover, the authors declared in their published paper:
+As shown in Table S1, this dataset includes 12 primary studies with 17 effect sizes. The ratio of the number of observations / effect sizes (*k*) to the number of studies (*N*) implies that this dataset suffers from statistical dependence: *k* = `r nrow(dat_sensory)` effect sizes, *N* = `r length(unique(dat_sensory$Study_ID))` unique primary studies,  *k/N* = `r nrow(dat_sensory) / length(unique(dat_sensory$Study_ID))`. This indicates that several studies in this meta-analysis contributed more than one effect size. Moreover, the authors declared in their published paper:  
 
-> If a study reported separate comparisons for males and females, or animals exposed to different SSRIs, we analyzed these comparisons as if they were separate studies. (page 55)
+> If a study reported separate comparisons for males and females, or animals exposed to different SSRIs, we analyzed these comparisons as if they were separate studies. (page 55)  
 
-These sentences indicate that multiple effect sizes are nested in one study (multiple effect sizes per study). In other words, the effect sizes are non-independent in this meta-analysis. Besides the issue of non-independence among effect sizes, there also exist multiple sources of heterogeneous biological and methodological characteristics in @ramsteijn2020perinatal's dataset (Figure S1).
+This sentence indicates that the authors ignored the fact that multiple effect sizes are nested in one study (multiple effect sizes per study). In reality, the effect sizes are non-independent in this meta-analysis. Besides the issue of non-independence among effect sizes, there also exist multiple sources of heterogeneous biological and methodological characteristics in @ramsteijn2020perinatal's dataset (Figure S1).  
 
 ```{r, results='hide'}
 ### draw an alluvial plot to show the heterogeneous experimental designs of the studies included in the meta-analysis
@@ -249,16 +249,16 @@ alluvil_plot <- ggplot(data = freq, aes(axis2 = Species, axis4 = Sex, axis1 = Te
 alluvil_plot
 ```
 
-### Figure S1 
-Heterogeneous experimental designs of primary studies included in the work example: relationship/nestedness between study species, sex, behavioural assay, and types of exposure (SSRIs).   
+### Figure S1  
+Heterogeneous experimental designs of primary studies included in the worked example: relationship/nestedness between study species, sex, behavioural assay, and types of exposure (SSRIs).   
 
-## 1.2 Fit a random-effects model
+## 1.2 Fit a random-effects model  
 
-@ramsteijn2020perinatal used standardized mean differences (SMD) as their effect size metric to quantify the effect of SSRI exposure on animals' sensory processing. They conducted a random-effects meta-analysis to estimate the overall effect of SSRI and a series of subgroup analyses to examine how different moderators mediate the magnitude of the effect of SSRI. Below, we reproduce @ramsteijn2020perinatal's analyses using their analytic pipelines (i.e., the traditional meta-analytic model). 
+@ramsteijn2020perinatal used standardized mean differences (SMD) as their effect size metric to quantify the effect of SSRI exposure on animals' sensory processing. They conducted a random-effects meta-analysis to estimate the overall effect of SSRI and a series of subgroup analyses to examine how different moderators mediate the magnitude of the effect of SSRI. Below, we reproduce @ramsteijn2020perinatal's analyses using their analytic pipelines (i.e., the traditional meta-analytic model).  
 
-### Effect size calculations
+### Effect size calculations  
 
-SMD and corresponding sampling variance can be computed using existing `R` packages, such as <code>metafor</code> package (<code>escal()</code> function) or <code>meta</code> package. Positive values of SMD represent that the perinatal SSRI exposure has a positive effect on offspring's sensory processing function. Here, we use <code>escal()</code> to calculate SMD and corresponding sampling variance. Note that other commonly used effect sizes (see **Sectio 5**) also can be easily calculated using the mentioned packages. The effect size and corresponding sampling variance can be computed with (using SMD as an example): 
+SMD and corresponding sampling variance can be computed using existing `R` packages, such as <code>metafor</code> package (<code>escal()</code> function) or <code>meta</code> package. Positive values of SMD represent that the perinatal SSRI exposure has a positive effect on offspring's sensory processing function. Here, we use <code>escal()</code> to calculate SMD and corresponding sampling variance. Note that other commonly used effect sizes (see **Section 5**) also can be easily calculated using the mentioned packages. The effect size and corresponding sampling variance can be computed with (using SMD as an example):  
 
 <pre class="code rsplus">SMD <- escalc(measure = "SMD", # standardised mean difference should be calculated (alternative effect sizes: "ROM" – lnRR, "CVR" – lnCVR, "VR" – lnVR; see below);
               m1i = SSRI_Mean, # mean of treatment group (SSRI);
@@ -268,7 +268,7 @@ SMD and corresponding sampling variance can be computed using existing `R` packa
               n1i = SSRI_Nadj, # sample size of treatment group; 
               n2i = Vehicle_Nadj, # sample size of control group; 
               data = dat_sensory, # dataset of our work example;
-              append = FALSE)</pre>  
+              append = FALSE)</pre>   
 
 ```{r, results='hide'}
 ### lets calculate SMD
@@ -288,8 +288,8 @@ metrics_set <- data.frame(SMD = SMD$yi, SMDV = SMD$vi)
 dat_sensory2 <- cbind(dat_sensory, metrics_set) # bind_cols()
 ```
 
-### Table S2
-The estimates of effect sizes (*SMD*) and their sampling variance (*SMDV*) for each included study.
+### Table S2  
+The estimates of effect sizes (*SMD*) and their sampling variance (*SMDV*) for each included study and comparison.  
 
 ```{r}
 ### show the calculated effect sizes and their sampling variances
@@ -297,20 +297,20 @@ t2 <- dat_sensory2 %>% select(c(1,2,24,25,26,27,28,29,30,31)) %>% DT::datatable(
 t2
 ```
 
-Now let's fit a random-effects model to these data (Equation 1; all notations can be found in the main text):
+Now let's fit a random-effects model to these data (Equation 1; all notations can be found in the main text):  
 
 $$
 ES_{j} = \beta_{0} + \mu_{j} + m_{j}, (1)\\ \mu_{j} \sim N(0,\tau^2)\\ m_{j} \sim N(0,\nu_{j})
 $$
-@ramsteijn2020perinatal used Review Manager (**RevMan v.5.3**) to perform the random-effects analysis. Here, we reproduce their random-effects meta-analysis using <code>rma()</code> function in <code>metafor</code> package with syntax:
+@ramsteijn2020perinatal used Review Manager (**RevMan v.5.3**) to perform the random-effects analysis. Here, we reproduce their random-effects meta-analysis using <code>rma()</code> function in <code>metafor</code> package with using this syntax:  
                                    
 <pre class="code rsplus">mod_random_SMD <- rma(yi = SMD, # the variable in your dataset containing calculated effect sizes / estimates of SMD, which can be obtained from R functions like escalc() function; 
                       vi = SMDV, # the variable in your dataset containing the estimates of sampling variance of SMD corresponding to each yi
                       test = "t", # the t-distribution is specified to calculate test statsitic and performs significance test (confidence intervals, and p-value for model coefficient intercept in Equation 1); alternative method: "z", which uses a standard normal distribution;
-                      data = dat_sensory2, # your dataset
-                      )</pre>
+                      data = dat_sensory2 # your dataset
+                      )</pre>  
                                    
-The model outputs look:
+The model outputs looks like this:  
 
 ```{r}
 ################################################################
@@ -319,80 +319,80 @@ The model outputs look:
 
 ### fit a random-effects model
 mod_random_SMD <- metafor::rma(yi = SMD, # observed effect sizes / estimates of SMD; the outputs of escalc() function; 
-                               vi = SMDV, # the estimates of samping variance of SMD; 
+                               vi = SMDV, # the estimates of sampling variance of SMD; 
                                test = "t", # the t-distribution is specified to calculate confidence intervals, and p-value for model coefficient (beta0 in Equation 1); alternative method: "z", which uses a standard normal distribution;
-                               data = dat_sensory2, # your dataset
+                               data = dat_sensory2 # the dataset
                               ) 
 summary(mod_random_SMD)
 ```
 
-Under ‘model results’, we can see these results are not exactly same but very close to what @ramsteijn2020perinatal report in their paper (page 62): The overall pooled SMD is estimated to be $\beta_{0}$ = `r round(mod_random_SMD$beta[1],3)` (original $\beta_{0}$ = -0.37) with a standard error of SE[$\beta_{0}$] = `r round(mod_random_SMD$se,3)`. The amount of heterogeneity (between-study variance) is $\tau^2$ = `r round(mod_random_SMD$tau2,3)` and corresponding $I^2$ = `r round(mod_random_SMD$I2,1)` (original$I^2$ = 68%). The slight difference is caused by different method used in our reanalysis and @ramsteijn2020perinatal's analysis. @ramsteijn2020perinatal performed the analysis using **Review Manager** which uses **DerSimonian-Laird** method as a default estimator. <code>rma.mv()</code> uses **restricted maximum-likelihood (REML)** method as the estimator, which is suggested by simulation studies (@langan2019comparison; @viechtbauer2007confidence). If we specify **DerSimonian-Laird method** via the argument <code>method</code> (<code>method = "DL"</code>), the results are much close to @ramsteijn2020perinatal's results:
+Under ‘model results’, we can see these results are not exactly the same, but very close to what @ramsteijn2020perinatal report in their paper (page 62): The overall pooled SMD is estimated to be $\beta_{0}$ = `r round(mod_random_SMD$beta[1],3)` (original $\beta_{0}$ = -0.37) with a standard error of SE[$\beta_{0}$] = `r round(mod_random_SMD$se,3)`. The amount of heterogeneity (between-study variance) is $\tau^2$ = `r round(mod_random_SMD$tau2,3)` and corresponding $I^2$ = `r round(mod_random_SMD$I2,1)` (original$I^2$ = 68%). The slight difference is caused by different analysis estimators used in our re-analysis and @ramsteijn2020perinatal's analysis. @ramsteijn2020perinatal performed the analysis using **Review Manager** which uses **DerSimonian-Laird** method as a default estimator. <code>rma.mv()</code> uses **restricted maximum-likelihood (REML)** method as the estimator, which is suggested by simulation studies (@langan2019comparison; @viechtbauer2007confidence). If we specify **DerSimonian-Laird method** via the argument <code>method</code> (<code>method = "DL"</code>), the results are much closer to @ramsteijn2020perinatal's results:  
 
 <pre class="code rsplus">mod_random_SMD2 <- rma(yi = SMD,  
                        vi = SMDV, 
                        test = "t",
                        method = "DL", # we followed the method used to estimate between-study variance in  Ramsteijn et al. (2020)'s analyses - DerSimonian-Laird method, which is the default estimator of Review Manager;
                        data = dat_sensory2 
-                      )</pre>
+                      )</pre>  
 
 ```{r}
 ### use DerSimonian-Laird method to estimate between-study variance
 mod_random_SMD2 <- metafor::rma(yi = SMD,  
                                    vi = SMDV, 
                                    test = "t",
-                                   method = "DL",
-                                   data = dat_sensory2 # your dataset
+                                   method = "DL", #selecting DerSimonian-Laird method
+                                   data = dat_sensory2 # the dataset
                                    )
 ```
 
-Now, the overall pooled SMD becomes $\beta_{0}$ = `r round(mod_random_SMD2$beta[1],3)` (original $\beta_{0}$ = 0.37) and the degree of heterogeneity becomes $I^2$ = `r round(mod_random_SMD$I2,1)` (original$I^2$ = 68%). 
+Now, the overall pooled SMD becomes $\beta_{0}$ = `r round(mod_random_SMD2$beta[1],3)` (original $\beta_{0}$ = 0.37) and the degree of heterogeneity becomes $I^2$ = `r round(mod_random_SMD$I2,1)` (original$I^2$ = 68%).  
 
-# Section 2 – Fit a multilevel meta-analytic model to estimate overall pooled effect {.tabset}
+# Section 2 – Fit a multilevel meta-analytic model to estimate overall pooled effect {.tabset}  
 
-In this section, with @ramsteijn2020perinatal's data, we illustrate how to conduct a meta-analysis in the framework of multilevel model to deal with non-independence among effect sizes and subsequently obtain a robust overall pooled effect. 
+In this section, with @ramsteijn2020perinatal's data, we illustrate how to conduct a meta-analysis in the framework of multilevel model to deal with non-independence among effect sizes and subsequently obtain a robust overall pooled effect.  
 
 ## 2.1 Concepts and rationale 
 
-The random-effects model assumes statistical independence between the effect sizes obtained from a set of studies. According to our survey, 89% of animal meta-analyses violated this assumption in practice (see our main text and survey results [in a Github repository](https://github.com/mlagisz/survey_neurobiology_MA/tree/main/source)). As mentioned early, many primary studies included in @ramsteijn2020perinatal contribute more than one effect size per study (i.e., non-dependent effect size). The effect sizes are correlated with each other within the 'clustering' variable - effect size derived from the same study, species, or other clustering variables (e.g., research group) may be more similar to each other than effect sizes from different study, species, or other clustering variables (e.g., research group). We have a nice visual summary of different forms of non-independence in animal meta-analytic dataset in the main text.
+The random-effects model assumes statistical independence between the effect sizes obtained from a set of studies. According to our survey, 89% of animal meta-analyses violated this assumption in practice (see our main text and survey results [in a Github repository](https://github.com/mlagisz/survey_neurobiology_MA)). As mentioned early, many primary studies included in @ramsteijn2020perinatal contribute more than one effect size per study (i.e., non-independent effect sizes). The effect sizes are correlated with each other within a 'clustering' variable - effect size derived from the same study, species, or other clustering variables (e.g., research group) may be more similar to each other than effect sizes from different study, species, or other clustering variables (e.g., research group). We have a nice visual summary of different forms of potential non-independence in animal data meta-analytic datasets in the main text.  
 
-Using a random-effects model to fit dependent effect sizes will ignore the dependency among effect sizes and treat them as if they were statistically independent. Such **ignorance** of non-independence could inflate Type I error and underestimate the associated standard error of model coefficient (SE[$\beta_{0}$]; see main text). As a result, the respective significance tests of model coefficient are inflated (i.e., distorted p-value and confidence intervals) - our work example clearly show this point (see below). The use of multilevel model can directly model the statistical dependence among effect sizes. The multilevel model also can accommodate various sources of heterogeneity (e.g., originating from different clusters: studies, species, treatment types). The simplest multilevel model is a 3-level multilevel meta-analytic model, which can be written as (Equation 2; all notations can be found in the main text):
+Using a random-effects model to fit dependent effect sizes will ignore the dependency among effect sizes and treat them as if they were statistically independent. Such **ignorance** of non-independence could inflate Type I error and underestimate the associated standard error of model coefficient (SE[$\beta_{0}$]; see the main text). As a result, the respective significance tests of model coefficients are inflated (i.e., distorting p-value and confidence intervals) - our worked example clearly shows this point (see below). The use of multilevel model can directly model the statistical dependence among effect sizes. The multilevel model also can accommodate various sources of heterogeneity (e.g., originating from different clusters: studies, species, treatment types). The simplest multilevel model is a 3-level multilevel meta-analytic model, which can be written as (Equation 2; all notations can be found in the main text):  
 $$
 ES_{[i]} = \beta_{0} + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (2)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
-$\beta_{0}$ in Equation 2 denotes the overall effect (also known as the overall mean or pooled effect size). Equation 2 is a so-called intercept-only multilevel meta-analytic model because the main model coefficient is the intercept (i.e., $\beta_{0}$). The principle that the multilevel model can deal with dependent effect sizes is that it can use a flexible random-effects structure to capture the non-independence structure due to clustering/nesting variables (analogous to the nested random-effects terms in a linear mixed effects model). 
+$\beta_{0}$ in Equation 2 denotes the overall effect (also known as the overall mean or pooled effect size). Equation 2 is a so-called intercept-only multilevel meta-analytic model because the main model coefficient is the intercept (i.e., $\beta_{0}$). The principle that the multilevel model can deal with dependent effect sizes is that it can use a flexible random-effects structure to capture the non-independence structure due to clustering/nesting variables (analogous to the nested random-effects terms in a linear mixed effects model).  
 
-To properly handle non-independence, you need to "fight" with it from the very beginning, namely when preparing your data file (e.g., Excel or CSV files), structure your data file in a way that permits the incorporation of non-independence among effect sizes. In this respect, you need to code a unique identifier for each observation/effect size (e.g., *Obs_ID*: *Obs1*, *Obs2*, *Obs3*), primary study (e.g., *Study_ID*: *s1*, *s2*, *s3*) and strain/species if applicable (e.g., *Strain_ID* or *Species_ID*), respectively. These unique identifiers allow true effect sizes to vary among different clustering variables (for example, to allow true effect sizes vary across different primary studies) and within a cluster variable (i.e., multiple effect sizes nested within an study), such that the corresponding non-independence and variation can be modeled.
+To properly handle non-independence, you need to deal with it from the very beginning, namely when preparing your data file (e.g., Excel or CSV files) structure your data file in a way that permits the incorporation of non-independence among effect sizes. In this respect, you need to code a unique identifier for each observation/effect size (e.g., *Obs_ID*: *Obs1*, *Obs2*, *Obs3*), primary study (e.g., *Study_ID*: *s1*, *s2*, *s3*) and strain/species if applicable (e.g., *Strain_ID* or *Species_ID*), respectively. These unique identifiers will allow true effect sizes to vary among different clustering variables (for example, to allow true effect sizes vary across different primary studies) and within a cluster variable (i.e., multiple effect sizes nested within an study), such that the corresponding non-independence and variation can be modeled.  
 
-## 2.2 Construct a multilevel meta-analytic model 
+## 2.2 Construct a multilevel meta-analytic model  
 
-To fit non-independent effect sizes in @ramsteijn2020perinatal's dataset, we need to use <code>rma.mv()</code> function rather than <code>rma()</code> in <code>metafor</code> package. <code>rma.mv()</code> function uses the <code>random</code> argument to deal with non-independence due to clustering. The <code>random</code> argument can be specified with a formula (which defines a nested random-effects structure) to account for non-independence due to clustering. Within the formula, each random effect is defined using the following form: starts with <code>~ 1</code>, followed by a vertical bar <code>|</code>; Behind <code>|</code>, a clustering variable (e.g., **Study_ID**, **Species_ID**) is assigned to account for the random effect. In our 3-level multilevel model, we have two random-effects terms: $\mu_{between[j]}$ and $\mu_{within[i]}$ (Equation 2). You may wonder there are only two random-effects terms, why Equation 2 is called as 3-level multilevel model. This is because Equation 2 also contains the sampling variance effect ($e_{[i]}$) on the "bottom" level (see bellow).
+To fit non-independent effect sizes in @ramsteijn2020perinatal's dataset, we need to use <code>rma.mv()</code> function rather than <code>rma()</code> in <code>metafor</code> package. <code>rma.mv()</code> function uses the <code>random</code> argument to deal with non-independence due to clustering. The <code>random</code> argument can be specified with a formula (which defines a nested random-effects structure) to account for non-independence due to clustering. Within the formula, each random effect is defined using the following form: starts with <code>~ 1</code>, followed by a vertical bar <code>|</code>; Behind <code>|</code>, a clustering variable (e.g., **Study_ID**, **Species_ID**) is assigned to account for the random effect. In our 3-level multilevel model, we have two random-effects terms: $\mu_{between[j]}$ and $\mu_{within[i]}$ (Equation 2). You may wonder why there are only two random-effects terms, why Equation 2 is called a "3-level multilevel model". This is because Equation 2 also contains the sampling variance effect ($e_{[i]}$) on the "bottom" level (see below).  
 
-**Level 1: sampling variance effect**
+**Level 1: sampling variance effect**  
 
-The sampling variance effect $e_{[j]}$ is on level 1, which is used to account for sampling/measurement error effect in effect size. 
+The sampling variance effect $e_{[j]}$ is on level 1, which is used to account for sampling/measurement error effect in effect size.    
 
-**Level 2: within-study effect**
+**Level 2: within-study effect**  
 
-**The random effect $\mu_{within[i]}$ is on level 2**, which can be used to account for within-study (observational level/effect size level) random effect and uses corresponding variance component $\sigma_{within}^2$ to capture within study-specific heterogeneity. Level 2 can be specified as: <code>random = ~ 1 | Obs_ID</code>.
+**The random effect $\mu_{within[i]}$ is on level 2**, which can be used to account for within-study (observational level/effect size level) random effect and uses corresponding variance component $\sigma_{within}^2$ to capture within study-specific heterogeneity. Level 2 can be specified as: <code>random = ~ 1 | Obs_ID</code>.  
 
-**level 3: between-study effect **
+**level 3: between-study effect **  
 
-**The random effect $\mu_{between[j]}$ is on level 3**, which can be used to account for between-study (study-specific) random effect and uses corresponding variance component $\sigma_{between}^2$ to capture study-specific heterogeneity. Level 3 can be specified as: <code>random = ~ 1 | Study_ID</code>. 
+**The random effect $\mu_{between[j]}$ is on level 3**, which can be used to account for between-study (study-specific) random effect and uses corresponding variance component $\sigma_{between}^2$ to capture study-specific heterogeneity. Level 3 can be specified as: <code>random = ~ 1 | Study_ID</code>.   
 
-Because 3-level model has two random effects, we need to use list() to bind them together: <code>random = list(~ 1 | Study_ID, ~ 1 | Obs_ID)</code>. Alternatively, we can use another form of formula to tell <code>rma.mv()</code> that the effect sizes are non-independent due to clustering (nesting random effects): <code>random = ~ 1 | Study_ID / Obs_ID</code>, which adds a random effect corresponding to the clustering variable *Study_ID* and a random effect corresponding to *Obs_ID* within *Study_ID* to the multilevel model. 
+Because 3-level model has two random effects, we need to use list() to bind them together: <code>random = list(~ 1 | Study_ID, ~ 1 | Obs_ID)</code>. Alternatively, we can use another form of formula to tell <code>rma.mv()</code> that the effect sizes are non-independent due to clustering (nesting random effects): <code>random = ~ 1 | Study_ID / Obs_ID</code>, which adds a random effect corresponding to the clustering variable *Study_ID* and a random effect corresponding to *Obs_ID* within *Study_ID* to the multilevel model.  
 
-We can use <code>rma.mv()</code> to fit a 3-level meta-analytic model to the calculated SMD with the syntax (**implementation of Equation 2**):
+We can use <code>rma.mv()</code> to fit a 3-level meta-analytic model to the calculated SMD with the syntax (**implementation of Equation 2**):  
 
 <pre class="code rsplus">mod_multilevel_SMD <- rma.mv(yi = SMD, 
                              V = SMDV, 
-                             random = list(~1 | Study_ID, # a random effect (clustering variable) that makes the true effect sizes vary across studies (variation between studies);
-                                           ~1 | Obs_ID), # a random effect that makes the true effect sizes vary within studies (variation within studies);
+                             random = list(~1 | Study_ID, # a random effect (clustering variable) that allows the true effect sizes vary across studies (variation between studies);
+                                           ~1 | Obs_ID), # a random effect that allows the true effect sizes vary within studies (variation within studies);
                              test = "t",
                              method = "REML", 
                              data = dat_sensory2
-                            )</pre>
+                            )</pre>  
 
-## 2.3 Interpretations of a multilevel meta-analytic model 
+## 2.3 Interpretations of a multilevel meta-analytic model   
 
 ```{r}
 ### add an unique ID for each observation
@@ -409,15 +409,15 @@ mod_multilevel_SMD <- metafor::rma.mv(yi = SMD,
                                       data = dat_sensory2)
 ```
 
-We can use forest plot to visualise the model results. The <code>forest()</code> function in <code>metafor</code> package can be used to make a typical forest plot. We see that the forest plot (Figure S2) is hard to tell whether there is statistically significant overall effect (pooled SMD) or not (the summary polygon shown at the bottom of the figure almost touches the vertical line which indicates the zero effect). Alternatively, we have invented a meta-analysis related package <code>orchaRd</code> (@nakagawa2021orchard). The <code>orchard_plot()</code> function can be used to create an orchard plot (forest-like plot) to visualise the results of a meta-analytic model (Figure S3). an orchard plot is more informative than a forest plot, for example, it can display the prediction interval of the overall effect (bold whiskers), the number of effect size (*k*) and the number of studies (the number in the bracket). an orchard plot is very useful when you have a big dataset (large *k*; see Figure S9).
+We can use forest plot to visualise the model results. The <code>forest()</code> function in <code>metafor</code> package can be used to make a typical forest plot. We see that in this forest plot (Figure S2) is hard to tell whether there is statistically significant overall effect (pooled SMD) or not (the summary polygon shown at the bottom of the figure almost touches the vertical line which indicates the zero effect). Alternatively, you can use an alternative meta-analysis visualisation package <code>orchaRd</code>, we created (@nakagawa2021orchard). The <code>orchard_plot()</code> function can be used to create an orchard plot (forest-like plot) to visualise the results of a meta-analytic model (Figure S3). An orchard plot is more informative than a forest plot. For example, it can display the prediction interval of the overall effect (bold whiskers), the number of effect sizes (*k*) and the number of studies (the number in the bracket). An orchard plot is very useful when you have a big dataset (large *k*; see Figure S9).  
 
 ```{r}
 # make a default forest plot
 forest(mod_multilevel_SMD)
 ```
 
-### Figure S2
-Forest plot showing the results of 17 effect sizes quantifying the effect of SSRI exposure on animal sensory processing (data from @ramsteijn2020perinatal).
+### Figure S2  
+Forest plot showing the results of analysing 17 effect sizes with a multilevel model quantifying the effect of SSRI exposure on animal sensory processing (data from @ramsteijn2020perinatal).  
 
 ```{r}
 # make an orchard plot
@@ -425,43 +425,42 @@ orchard_plot(mod_multilevel_SMD, mod = "1", xlab = "Standardised mean difference
   scale_x_discrete(labels = c("Overall effect (pooled SMD)")) 
 ```
 
-### Figure S3
-Orchard plot (forest-like plot) showing the results of 17 effect sizes quantifying the effect of SSRI exposure on animal sensory processing (data from @ramsteijn2020perinatal). You can use help(orchard_plot) to look at the corresponding arguments and add more code to make it more elegant (@nakagawa2021orchard).
+### Figure S3  
+Orchard plot (forest-like plot) showing the results of analysing 17 effect sizes with a multilevel model quantifying the effect of SSRI exposure on animal sensory processing (data from @ramsteijn2020perinatal). You can use help(orchard_plot) to look at the corresponding arguments and add more code to make it more elegant (@nakagawa2021orchard).  
 
 **The outputs of the fitted multilevel model look:**
 ```{r}
 summary(mod_multilevel_SMD)
 ```
 
-Next, let’s go through the model outputs one by one.
+Next, let’s go through the printed model outputs one by one.  
 
-- **Multivariate Meta-Analysis Model**
+- **Multivariate Meta-Analysis Model**  
 
-<code>k</code> corresponds to the number of independent variables (effect sizes) fed to the multilevel model. <code>method: REML</code> means the REML method is specified as estimation procedure for model fitting to obtain model estimates  (e.g., variance components, model coefficients). All other elements are fit statistics and information-criteria based statistics, including <code>logLik</code> (restricted log-likelihood of the fitted model
-), <code>Deviance</code>, <code>AIC</code> (Akaike information criterion score of the fitted model), <code>BIC</code> (Bayesian information criteria) and <code>AICc</code> (AIC corrected for small sample sizes). These statistics are used for model selection, that is, to select ‘better’ models (see **Section 6**)
+In the top output section, <code>k</code> corresponds to the number of effect sizes fed to the multilevel model. <code>method: REML</code> means the REML method was specified as estimation procedure for model fitting to obtain model estimates  (e.g., variance components, model coefficients). All other elements are fit statistics and information-criteria based statistics, including <code>logLik</code> (restricted log-likelihood of the fitted model), <code>Deviance</code>, <code>AIC</code> (Akaike information criterion score of the fitted model), <code>BIC</code> (Bayesian information criterion) and <code>AICc</code> (AIC corrected for small sample sizes). These statistics are used for model selection, that is, to select ‘better’ models (see **Section 6**).  
 
-- **Variance Components**
+- **Variance Components**  
 
-This section shows the variance estimated for each level of the fitted 3-level model. The first one, <code>sigma^2.1</code>, represents the level 3 between-study variance, $\sigma_{between}^2$. Conceptually, this is equivalent to between-study heterogeneity variance $\tau^2$ in a random-effects model - Equation 1 (but the values of $\sigma_{between}^2$ and $\tau^2$ are not the same; see next section: Comparing the multilevel and random-effects models). The second variance component, <code>sigma^2.2</code>, represents the level 2 within-study variance, $\sigma_{within}^2$. The heading code>estim</code> shows the estimates of variance components in levels 3 and 2 ($\sigma_{between}^2$ and $\sigma_{within}^2$). The heading code>sqrt</code> shows the standard deviation of variance components - square root of $\sigma^2$. The column of <code>nlvls</code> shows how many levels each random effect has. <code>factor</code> is the name of the clustering variables we used in the <code>random</code> argument to specify corresponding random effects.
+This section of the printed output shows the variance estimated for each level of the fitted 3-level model. The first one, <code>sigma^2.1</code>, represents the level 3 between-study variance, $\sigma_{between}^2$. Conceptually, this is equivalent to between-study heterogeneity variance $\tau^2$ in a random-effects model - Equation 1 (but the values of $\sigma_{between}^2$ and $\tau^2$ are not the same; see next section: Comparing the multilevel and random-effects models). The second variance component, <code>sigma^2.2</code>, represents the level 2 within-study variance, $\sigma_{within}^2$. The heading <code>estim</code> shows the estimates of variance components in levels 3 and 2 ($\sigma_{between}^2$ and $\sigma_{within}^2$). The heading <code>sqrt</code> shows the standard deviation of variance components - square root of $\sigma^2$. The column of <code>nlvls</code> shows how many levels each random effect has. <code>factor</code> is the name of the clustering variables we used in the <code>random</code> argument to specify corresponding random effects.  
 
-- **Test for Heterogeneity**
+- **Test for Heterogeneity**  
 
-This section shows results of Cochran’s Q-test, which is used to test the null hypothesis that all animal studies have a same/equal effect. <code>p-val</code> < 0.05 means that effect sizes derived from the animal studies are heterogeneous. In other words, substantial heterogeneity exists in this animal dataset. 
+This printed output section shows results of Cochran’s Q-test, which is used to test the null hypothesis that all animal studies have the same/equal effect. <code>p-val</code> < 0.05 means that effect sizes derived from the animal studies are heterogeneous. In other words, substantial heterogeneity exists in this animal dataset.  
 
-- **Model Results**
+- **Model Results**  
 
-<code>estimate</code> is the estimate of the overall/pooled effect (i.e., grand mean or meta-analytic mean; $\beta_{0}$ in Equation 2). <code>se</code> is the standard error of the estimate: as in our example, it is (SE[$\beta_{0}$]. <code>tval</code> is the value of test statistic (in our case: t-value). <code>ci.lb</code> and <code>ci.Ub</code> are lower and upper boundary of confidence intervals.
+<code>estimate</code> is the estimate of the overall/pooled effect (i.e., grand mean or meta-analytic mean; $\beta_{0}$ in Equation 2). <code>se</code> is the standard error of the estimate: as in our example, it is (SE[$\beta_{0}$]. <code>tval</code> is the value of test statistic (in our case: t-value). <code>ci.lb</code> and <code>ci.Ub</code> are lower and upper boundary of confidence intervals (CI).  
 
-## 2.4 Handle non-independence to avoid the distortion of significance test and spurious conclusions
+## 2.4 Handle non-independence to avoid the distortion of significance test and spurious conclusions   
 
-As mentioned in the main text, the traditional statistical models used in animal meta-analyses often fail to handle statistical non-dependence, inflating type I error, distorting significance test and leading to spurious conclusions. This worked example exactly shows this point. Same to a random-effects meta-analysis, the first aim of a multilevel meta-analysis is often to estimate the overall effect across all animal studies (overall mean or pooled effect size; $\beta_{0}$ in Equation 2). Under <code>Model Results</code>, we can see what we need for this aim: the magnitude of the overall effect ($\beta_{0}$), standard error (SE[$\beta_{0}$]), corresponding two-tailed p-value, and 95% confidence intervals (CIs). The multilevel showed that animals exposed to SSRIs did not have a significantly less efficient sensory processing than those exposed to vehicle ($\beta_{0}$ = `r round(mod_multilevel_SMD$beta[1],3)`, 95% CIs = [`r round(mod_multilevel_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`], p-value = `r round(mod_multilevel_SMD$pval,3)`).
+As mentioned in the main text, the traditional statistical models used in animal data meta-analyses often fail to handle statistical non-independence, inflating type I error, distorting significance test results and leading to spurious conclusions. This worked example exactly shows this point. As in a random-effects meta-analysis, the first aim of a multilevel meta-analysis is often to estimate the overall effect across all animal studies (overall mean or pooled effect size; $\beta_{0}$ in Equation 2). Under <code>Model Results</code>, we can find the estimates we need for this aim: the magnitude of the overall effect ($\beta_{0}$), its  standard error (SE[$\beta_{0}$]), corresponding two-tailed p-value, and 95% confidence intervals (CIs). Our multilevel model revealed that animals exposed to SSRIs did not have a significantly less efficient sensory processing than those exposed to vehicle ($\beta_{0}$ = `r round(mod_multilevel_SMD$beta[1],3)`, 95% CIs = [`r round(mod_multilevel_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`], p-value = `r round(mod_multilevel_SMD$pval,3)`).   
  
-**Conflicting results between the multilevel model and random-effect model**
+**Conflicting results between the multilevel model and random-effect model**  
 
-When comparing the results of our 3-level model with @ramsteijn2020perinatal's original results, we found that the conclusions of our 3-level model conflict with those reached by @ramsteijn2020perinatal (who used the random-effects model). @ramsteijn2020perinatal's analysis (page 62) indicates that SSRI exposure has a statistically significant decreasing effect on sensory processing in animals (our re-analysis of using the random-effects model also suggested this point). **However**, the multilevel model suggests that the SSRI-effect is non-significant (Table S3). 
+When comparing the results of our 3-level model with @ramsteijn2020perinatal's original results, we found that the conclusions of our 3-level model conflict with those reached by @ramsteijn2020perinatal (who used a simple random-effects model). @ramsteijn2020perinatal's analysis (page 62) indicates that SSRI exposure has a statistically significant negative effect on sensory processing in animals (our re-analysis when using a random-effects model also suggested this point). **However**, the multilevel model suggests that the SSRI-effect is actually statistically non-significant when accounting for data non-independence (Table S3).    
 
-### Table S3
-Results of the random-effects and 3-level meta-analytic models.
+### Table S3   
+Results of the random-effects and 3-level meta-analytic models.   
 
 ```{r}
 
@@ -481,15 +480,16 @@ names(t3) <- c("Model type", "Overall effect (pooled SMD)", "Standard error", "p
 DT::datatable(t(t3))
 ```
 
-We note that the magnitude of the overall effect (pooled effect size: $\beta_{0}$ = `r round(mod_multilevel_SMD$beta[1],3)`) in the multilevel model is very close to that in the random-effect model ($\beta_{0}$ = `r round(mod_random_SMD$beta[1],3)`). But the multilevel model indicates that the overall effect (pooled effect size: $\beta_{0}$) is not statistically significant, while the random-effects model indicates the overall effect (pooled effect size: $\beta_{0}$) is statistically significant. This clearly shows that using the random-effects model to fit non-independent effect sizes underestimates the standard error of model coefficient (SE[$\beta_{0}$]) and distort corresponding statistical inference (e.g., inflated p-value): SE[$\beta_{0}$] = `r round(mod_multilevel_SMD$se,3)` in the multilevel model vs. SE[$\beta_{0}$] = `r round(mod_random_SMD$se,3)` in the random-effects model; p-value = `r round(mod_multilevel_SMD$pval,3)` in the multilevel model vs. p-value = `r round(mod_random_SMD$pval,3)` in the random-effect model. Accordingly, the width of 95% CIs in the multilevel model is wider than that in the random-effects model: = [`r round(mod_multilevel_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`] in the multilevel model vs. [`r round(mod_random_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`] in the random-effects model.
+We note that the magnitude of the overall effect (pooled effect size: $\beta_{0}$ = `r round(mod_multilevel_SMD$beta[1],3)`) in the multilevel model is very close to that in the random-effect model ($\beta_{0}$ = `r round(mod_random_SMD$beta[1],3)`). But the multilevel model indicates that the overall effect (pooled effect size: $\beta_{0}$) is not statistically significant, while the random-effects model indicates the overall effect (pooled effect size: $\beta_{0}$) is statistically significant. This clearly shows that using the random-effects model to fit non-independent effect sizes underestimates the standard error of model coefficient (SE[$\beta_{0}$]) and distorts corresponding statistical inference (e.g., inflated p-value): SE[$\beta_{0}$] = `r round(mod_multilevel_SMD$se,3)` in the multilevel model vs. SE[$\beta_{0}$] = `r round(mod_random_SMD$se,3)` in the random-effects model; p-value = `r round(mod_multilevel_SMD$pval,3)` in the multilevel model vs. p-value = `r round(mod_random_SMD$pval,3)` in the random-effect model. Accordingly, the width of 95% CIs in the multilevel model is wider than that in the random-effects model: = [`r round(mod_multilevel_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`] in the multilevel model vs. [`r round(mod_random_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`] in the random-effects model.  
 
-# Section 3 – Partition heterogeneity among effect size using the multilevel model  {.tabset}
+# Section 3 – Partition heterogeneity among effect sizes using the multilevel model  {.tabset}  
 
 ## 3.1 Calculate multilevel version of I2 statistic and variance components
 
-As the traditional meta-analytic models (i.e., fixed- and random-effects models), the multilevel model also can measure the degree of inconsistency among effect sizes (i.e., the amount of heterogeneity). The hierarchical nature of the multilevel model means that animal meta-analysis can benefit from decomposing heterogeneity across levels, e.g., within- and between-study heterogeneity (more complex heterogeneity source: species-specific heterogeneity; see our second worked example in **Section 6**). However, the random-effects model can only quantify between-study heterogeneity, which makes within-study heterogeneity mistakenly perceived as between-study heterogeneity (i.e., confounding source of heterogeneity). Below, we use ramsteijn2020perinatal's data to show how to partition multiple sources of heterogeneity using the multilevel version of $I^2$ statistic and variance components ($\sigma^2$), such that we can avoid confounded heterogeneity.
+As in the traditional meta-analytic models (i.e., fixed- and random-effects models), the multilevel model also can measure the degree of inconsistency among effect sizes (i.e., the amount of heterogeneity). The hierarchical nature of the multilevel model means that animal meta-analysis can benefit from decomposing heterogeneity across levels, e.g., within- and between-study heterogeneity (more complex heterogeneity source: species-specific heterogeneity; see our second worked example in **Section 6**). However, the random-effects model can only quantify between-study heterogeneity, which makes within-study heterogeneity mistakenly perceived as between-study heterogeneity (i.e., confounding source of heterogeneity). Below, we use @ramsteijn2020perinatal's data to show how to partition multiple sources of heterogeneity using the multilevel version of $I^2$ statistic and variance components ($\sigma^2$), such that we can avoid confounded heterogeneity estimates.  
 
-The following formulas can be used to calculate the multilevel version of $I^2$ statistic (Equations 4 to 6 in the main text):
+The following formulas can be used to calculate the multilevel version of $I^2$ statistic (Equations 4 to 6 in the main text):  
+
 $$
 I^2_{between}=\frac{\sigma_{between}^2} {Var[ES_{i}]}=\frac{\sigma_{between}^2} {\sigma_{total}^2+\sigma_{sampling}^2}, (4)
 $$
@@ -502,58 +502,59 @@ $$
 I^2_{total}=\frac{\sigma_{within}^2} {Var[ES_{i}]}=\frac{\sigma_{within}^2} {\sigma_{total}^2+\sigma_{sampling}^2}, (6)
 $$
 
-$\sigma_{between}^2$ and $\sigma_{within}^2$ are the variance components corresponding to between- and within-study level random-effects in the multilevel model (specified by the syntax <code>random = list(~ 1 | Study_ID, ~ 1 | Obs_ID)</code> in <code>rma.mv()</code>). The value of each level of $\sigma^2$ can be found at the **Variance Components**. $\sigma_{total}^2$ is the total variance, whose value equals to the sum of $\sigma_{between}^2$ and $\sigma_{within}^2$. $\sigma_{sampling}^2$ is a “typical” sampling-error variance, which can be calculated by: 
+$\sigma_{between}^2$ and $\sigma_{within}^2$ are the variance components corresponding to between- and within-study level random-effects in the multilevel model (specified by the syntax <code>random = list(~ 1 | Study_ID, ~ 1 | Obs_ID)</code> in <code>rma.mv()</code>). The value of each level of $\sigma^2$ can be found at the **Variance Components**. $\sigma_{total}^2$ is the total variance, whose value equals to the sum of $\sigma_{between}^2$ and $\sigma_{within}^2$. $\sigma_{sampling}^2$ is a “typical” sampling-error variance, which can be calculated as:   
 $$
 \sigma_{sampling}^2=\frac{(k-1)\sum_{i=1}^{k} 1/\nu_{i}} {(\sum_{i=1}^{k} 1/\nu_{i})^2-\sum_{i=1}^{k} 1/\nu_{i}^2}, (7)
 $$
 
-In reality, we do not need to calculate multilevel versions of $I^2$ statistic manually. <code>i2_ml()</code> function in <code>orchaRd</code> package (@nakagawa2021orchard) is very convenient and user-friendly to decompose $I^2$ statistic across levels. we can calculate multilevel version of $I^2$ statistic using `i2_ml()` function in one line code: 
+In reality, we do not need to calculate multilevel versions of $I^2$ statistic manually. <code>i2_ml()</code> function in <code>orchaRd</code> package (@nakagawa2021orchard) is very convenient and user-friendly for decomposing $I^2$ statistic across levels. We can calculate multilevel version of $I^2$ statistic using `i2_ml()` function in one line code:   
 
 <pre class="code rsplus">i2_ml(mod_multilevel_SMD)</pre>
-Then $I^2$ statistics corresponding to each level (including $I^2_{total}$) are provided:
+
+Then, $I^2$ statistics corresponding to each level (including $I^2_{total}$) are provided as:   
 
 ```{r}
 i2_ml(mod_multilevel_SMD)
 ```
 
-## 3.2 Handle multiple sources of heterogeneity to avoid confounded heterogeneity
+## 3.2 Handle multiple sources of heterogeneity to avoid confounded heterogeneity  
 
-As shown above, the <code>i2_ml()</code> will calculate $I^2$ statistic for each random-effects corresponding to each variance component. Table S3 shows the distinctions between the random-effects model and multilevel model in terms of heterogeneity. We can see that between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model are overestimated. The two values in the 3-level model are almost half smaller than those in the random-effects model. This is because the random-effects model incorrectly allocates within-study variance ($\sigma^2_{within}$) and heterogeneity ($I^2_{within}$) to between-study variance ($\sigma^2_{betwween}$) and heterogeneity ($I^2_{between}$). You can easily corroborate this point by comparing the between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model with the total variance ($\sigma^2_{total}$) and heterogeneity ($I^2_{total}$) in the 3-level model (i.e. the sum of these values in within- and between-study level). This means that using the random-effects model to fit this dataset leads to a wrong conclusion that the study level has a high amount of heterogeneity ($I^2_{between}$ = 69.38%). However, the study level only explains 27.17% of the total heterogeneity. The remained 29.21% of the total heterogeneity is due to the within-study level (effect-size/observational level).
+As shown above, the <code>i2_ml()</code> will calculate $I^2$ statistic for each random-effects corresponding to each variance component. Table S3 above shows the distinctions between the random-effects model and multilevel model in terms of heterogeneity. We can see that between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model are overestimated. The two values in the 3-level model are almost half of those in the random-effects model. This is because the random-effects model incorrectly allocates within-study variance ($\sigma^2_{within}$) and heterogeneity ($I^2_{within}$) to between-study variance ($\sigma^2_{betwween}$) and heterogeneity ($I^2_{between}$). You can easily corroborate this point by comparing the between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model with the total variance ($\sigma^2_{total}$) and heterogeneity ($I^2_{total}$) in the 3-level model (i.e. the sum of these values in within- and between-study level). This means that using the random-effects model to fit this dataset leads to a wrong conclusion that the study level has a high amount of heterogeneity ($I^2_{between}$ = 69.38%). However, the study level only explains 27.17% of the total heterogeneity. The remaining 29.21% of the total heterogeneity is due to the within-study level (effect-size/observational level).  
 
-## 3.3 Compute prediction intervals 
+## 3.3 Compute prediction intervals   
 
-We recommend researchers to use a complementary statistic index to quantify heterogeneity - prediction interval (PI), which is defined as the estimate of an interval (a plausible value range) wherein the future measurements (i.e., new effect sizes) would fall when no sampling errors exist. This can be calculated by (see Equation 8 in the main text for notions): 
+We recommend researchers to use a complementary statistic index to quantify heterogeneity - prediction interval (PI), which is defined as the estimate of an interval (a plausible value range) wherein the future measurements (i.e., new effect sizes) would fall when no sampling errors exist. This can be calculated as (see Equation 8 in the main text for notation explanation):  
 $$
 \text{95%PI} = \beta_{0} \pm t_{0.975} \sqrt{\sigma^2_{total}+ \text{SE}[\beta_{0}^2]}, (8)
 $$
-All the required elements for the calculation of 95% PIs can be found at the outputs of the <code>rma.mv()</code> (see **Interpretation of the results of a multilevel meta-analytic model**). You can also use an existing function - <code>predict()</code> to obtain 95% PIs for the overall effect (pooled effect size):
+All the required elements for the calculation of 95% PIs can be found in the outputs of the <code>rma.mv()</code> (see **Interpretation of the results of a multilevel meta-analytic model**). You can also use an existing function - <code>predict()</code> to obtain 95% PIs for the overall effect (pooled effect size):  
 
 <pre class="code rsplus">predict(mod_multilevel_SMD)</pre>
 
-The corresponding output look:
+The corresponding output looks like:  
 
 ```{r}
 PI_int_SMD <- predict(mod_multilevel_SMD)
 PI_int_SMD
 ```
 
-We can see that 95% PIs of the overall effect of SSRI are [`r  round(PI_int_SMD$pi.lb,2)`,`r round(PI_int_SMD$pi.ub,2)`], which means 95% of new trials regarding the perinatal SSRI exposure will have an effect size (i.e., SMD) in the range of [`r  round(PI_int_SMD$pi.lb,2)`,`r round(PI_int_SMD$pi.ub,2)`] over different experimental contexts (across different types of SSRI, animal species, sex and ages).
+We can see that 95% PIs of the overall effect of SSRI are [`r  round(PI_int_SMD$pi.lb,2)`,`r round(PI_int_SMD$pi.ub,2)`], which means 95% of new trials regarding the perinatal SSRI exposure will have an effect size (i.e., SMD) in the range of [`r  round(PI_int_SMD$pi.lb,2)`,`r round(PI_int_SMD$pi.ub,2)`] over different experimental contexts (across different types of SSRI, animal species, sex and ages).  
 
-# Section 4 – Fit multilevel meta-regressions to explain heterogeneity and estimate moderator effects {.tabset}
+# Section 4 – Fit multilevel meta-regressions to explain heterogeneity and estimate moderator effects {.tabset}  
 
-## 4.1 Concepts and rationale 
+## 4.1 Concepts and rationale   
 
-A large $I^2_{total}$ = 76.38% in @ramsteijn2020perinatal's dataset indicates that it is necessary to explain (at least part of) this heterogeneity using variables extracted from primary studies as moderator variables (also known as predictors). In other words, let's examine how different study-level characteristics (variables/factors) modulate the magnitude of the effect of SSRI exposure. @ramsteijn2020perinatal used the subgroup analysis to explain the heterogeneity in the effect sizes. Here, we recommend using a multilevel meta-regression model to explain the heterogeneity and examine the moderator effects:  
+A large $I^2_{total}$ = 76.38% in @ramsteijn2020perinatal's dataset indicates that it is desirable to explain (at least part of) this heterogeneity using variables extracted from primary studies as moderator variables (also known as predictors). In other words,  examining how different study-level characteristics (variables/factors) modulate the magnitude of the effect of SSRI exposure. @ramsteijn2020perinatal used the subgroup analysis to explain the heterogeneity in the effect sizes. Here, we recommend using a multilevel meta-regression model to explain the heterogeneity and examine the moderator effects:  
 $$
 ES_{[i]} = \beta_{0}' + \beta_{1}x_{between[j]} + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (8)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
-As we illustrate in the main text, a subgroup analysis is equivalent to a meta-regression model if using a dummy-coding strategy to deal with categorical predictors (note that in the context of meta-analysis, we usually call a predictor as a moderator). In the main text, we use an example to show how to dummy-code categorical moderators for a multilevel meta-regression. The rationale of dummy-coding strategy is to (1) create dummy-coded variables for a categorical moderator to represent different levels, (2) left one of the dummy variables out of the regression model and set its level as the "reference" level (see details in the main text). Other than creating the dummy-coded variables by hand, we prefer to let <code>R</code> dummy-code categorical moderator variables automatically.
+As we demonstrated in the main text, a subgroup analysis is equivalent to a meta-regression model if using a dummy-coding strategy to deal with categorical predictors (note that in the context of a meta-analysis, we usually call a predictor as a moderator). In the main text, we used an example to show how to dummy-code categorical moderators for a multilevel meta-regression. The rationale of dummy-coding strategy is to (1) create dummy-coded variables for a categorical moderator to represent different levels, (2) leave one of the dummy variables out of the regression model and set its level as the "reference" level (see details in the main text). Other than creating the dummy-coded variables by hand, we prefer to let <code>R</code> dummy-code categorical moderator variables automatically.  
 
-## 4.2 Construct a multilevel meta-regression model
+## 4.2 Construct a multilevel meta-regression model   
 
-A multilevel regression model (e.g., Equation 8) can be fitted using <code>rma.mv()</code> function. The <code>mods</code> argument in <code>rma.mv()</code> is used to specify the categorical moderators (also the continuous moderators). The syntax for <code>mods</code> is as follows: starting with a tilde <code>~</code> (a general requirement of a formula in <code>R</code>), followed by the name of the moderator (e.g., <code>mods = ~ moderator1</code>).
+A multilevel regression model (e.g., Equation 8) can be fitted using <code>rma.mv()</code> function. The <code>mods</code> argument in <code>rma.mv()</code> is used to specify the categorical moderators (also the continuous moderators). The syntax for <code>mods</code> is as follows: starting with a tilde <code>~</code> (a general requirement of a formula in <code>R</code>), followed by the name of the moderator (e.g., <code>mods = ~ moderator1</code>).  
 
-In this worked example, @ramsteijn2020perinatal examined whether the effects of SSRI exposure differ depending on sex (male, female, or both). This categorical moderator is labelled as the column *Sex* column in the dataset. A 3-level meta-regression model with *Sex* as a moderator variable can be fitted using the follow code:
+In this worked example, @ramsteijn2020perinatal examined whether the effects of SSRI exposure differ depending on sex (male, female, or both). This categorical moderator is labelled as the column *Sex* column in the dataset. A 3-level meta-regression model with *Sex* as a moderator variable can be fitted using the follow code:  
 
 <pre class="code rsplus">
 mod_multilevel_reg_sex_SMD <- rma.mv(yi = SMD, 
@@ -565,9 +566,9 @@ mod_multilevel_reg_sex_SMD <- rma.mv(yi = SMD,
                                      method = "REML", 
                                      data = dat_sensory2)</pre>  
 
-See **Interpretations of a multilevel meta-regression model** for a comprehensive interpretation of the outputs for the above fitted meta-regression model. 
+See **Interpretations of a multilevel meta-regression model** below for a comprehensive interpretation of the outputs for the above fitted meta-regression model.  
 
-## 4.3 Interpretations of a multilevel meta-regression model 
+## 4.3 Interpretations of a multilevel meta-regression model  
 
 ```{r}
 ### multilevel meta-regression model using sex as a moderator
@@ -581,45 +582,45 @@ mod_multilevel_reg_sex_SMD <- rma.mv(yi = SMD,
                                      data = dat_sensory2)
 ```
 
-We can use <code>orchard_plot()</code> to make an orchard plot to visualise the results of a multilevel meta-regression model. Figure S4 shows that neither *Male*, *Female*, nor *Both* have a statistically significant effect.
+We can use <code>orchard_plot()</code> to make an orchard plot to visualise the results of a multilevel meta-regression model. Figure S4 shows that neither *Male*, *Female*, nor *Both* have a statistically significant moderating effect (their CI overlap).  
 
 ```{r}
 # make an orchard plot
 orchard_plot(mod_multilevel_reg_sex_SMD, mod = "Sex", xlab = "Standardised mean difference (SMD)", group = "Study_ID", data = dat_sensory2, k = TRUE, g = TRUE, transfm = "none", angle = 0)
 ```
 
-### Figure S4
-Orchard plot (forest-like plot) showing the mediated effect of sex on the effect sizes quantifying the effect of SSRI exposure on animal sensory processing (data from @ramsteijn2020perinatal). You can use help(orchard_plot) to look at the corresponding arguments and add more code to make it more elegant (@nakagawa2021orchard).
+### Figure S4  
+Orchard plot (forest-like plot) showing the mediated effect of sex in the analysis of SSRI exposure on animal sensory processing (data from @ramsteijn2020perinatal). You can use help(orchard_plot) to look at the corresponding arguments and add more code to make it more elegant (@nakagawa2021orchard).  
 
-**Using <code>rma.mv()</code> to fit a multilevel meta-regression model will yield the following outputs:**
+**Using <code>rma.mv()</code> to fit a multilevel meta-regression model will yield the following output:**   
 
 ```{r}
 summary(mod_multilevel_reg_sex_SMD)
 ```
 
-Next, let's go through the outputs one by one.
+Next, let's go through the parts of this printed output one by one.  
 
-- **Multivariate Meta-Analysis Model**
+- **Multivariate Meta-Analysis Model**  
 
-The interpretations of the results under **Multivariate Meta-Analysis Model** are same with those in the section of **Interpretations of a multilevel meta-analytic model**.
+The interpretations of the results under **Multivariate Meta-Analysis Model** are same as those in the section of **Interpretations of a multilevel meta-analytic model**.  
 
-- **Variance Components**
+- **Variance Components**  
 
-The interpretations of the results under **Variance Components** are same with those in the section of **Interpretations of a multilevel meta-analytic model**.
+The interpretations of the results under **Variance Components** are same as those in the section of **Interpretations of a multilevel meta-analytic model**.  
 
-- **Test for Residual Heterogeneity**
+- **Test for Residual Heterogeneity**  
 
-Results under **Test for Residual Heterogeneity** are similar to **Test for Heterogeneity** in the section of **Interpretations of a multilevel meta-analytic model**. But the two are not exactly the same. <code>QE</code> is the test statistic used to test whether the amount of "residual heterogeneity" among the effect sizes is substantial. "residual heterogeneity" means that the amount of heterogeneity that is not explained by the moderator of sex added in the meta-regression model. From the results, we can see that the inclusion of sex as a moderator only can reduce a little of heterogeneity (<code>Q</code> is reduced from 52.2611 to 49.0716). <code>p-val</code> < 0.0001 indicates that residual heterogeneity still remains statistically meaningful.
+Results under **Test for Residual Heterogeneity** are similar to **Test for Heterogeneity** in the section **Interpretations of a multilevel meta-analytic model**. But the two are not exactly the same. <code>QE</code> is the test statistic used to test whether the amount of "residual heterogeneity" among the effect sizes is substantial. "Residual heterogeneity" means the amount of heterogeneity that is not explained by the moderator of sex added in the meta-regression model. From the results, we can see that the inclusion of sex as a moderator only can account for very little of heterogeneity (<code>Q</code> is reduced from 52.2611 to 49.0716). <code>p-val</code> < 0.0001 indicates that residual heterogeneity still remains statistically significant.  
 
-- **Test of Moderators (coefficients 2:3)**
+- **Test of Moderators (coefficients 2:3)**  
 
-Results under **Test of Moderators** present the omnibus test of all model coefficients. <code>coefficients 2:3()</code> means that an omnibus test of coefficients 2 to 3 is conducted to test the null hypothesis of $H0:\beta_{1}=\beta_{2}=0$ (note that the moderator sex has three levels [male, female or both], so this fitted meta-regression has three model coefficients). By default, the first coefficient (the intercept, which is denoted as $\beta_{0}$ in Equation 8) is excluded when fitting the meta-regression model. The first coefficient (the intercept) can be included in the meta-regression model intentionally (see below for details), then the omnibus test will include three coefficients (including the first coefficient - intercept); the corresponding null hypothesis will be  $H0:\beta_{0}=\beta_{1}=\beta_{2}=0$. <code>F(df1 = 2, df2 = 14)</code> = 2.2580 and <code>p-val</code> = 0.1413 indicate that the null hypothesis is rejected (the test of $H0:\beta_{1}=\beta_{2}=0$ is not significant). In other words, there is no significant difference between different subgroups of sex (i.e., *male*, *female* or *both*) or the sex as a whole does not impact the average effect of SSRI exposure (i.e., the sex is not able to explain any heterogeneity in effect sizes).
+Results under **Test of Moderators** present the omnibus test of all model coefficients. <code>coefficients 2:3()</code> means that an omnibus test of coefficients 2 to 3 is conducted to test the null hypothesis of $H0:\beta_{1}=\beta_{2}=0$ (note that the moderator Sex has three levels [male, female or both], so this fitted meta-regression has three model coefficients). By default, the first coefficient (the intercept, which is denoted as $\beta_{0}$ in Equation 8) is excluded when fitting the meta-regression model. The first coefficient (the intercept) can be included in the meta-regression model intentionally (see below for details), then the omnibus test will include three coefficients (including the first coefficient - intercept); the corresponding null hypothesis will be  $H0:\beta_{0}=\beta_{1}=\beta_{2}=0$. <code>F(df1 = 2, df2 = 14)</code> = 2.2580 and <code>p-val</code> = 0.1413 indicate that the null hypothesis is rejected (the test of $H0:\beta_{1}=\beta_{2}=0$ is not significant). In other words, there is no significant difference between different subgroups of Sex (i.e., *male*, *female* or *both*) or the Sex as a whole does not impact the average effect of SSRI exposure (i.e., sex of animals can not explain any heterogeneity in effect sizes).  
 
-- **Model Results**
+- **Model Results**  
 
-Results under **Model Results** report the estimates of all model coefficients and their significance test. The moderator sex has three levels: male, female or both. By default, <code>R</code> will alphabetize the dummy-coded variable (in this case, *Sex*). The subgroup of *both* is set as the "reference" level and left out the model (because the letter "b" [*both*] comes before "f" [*female*] and "m" [*male*]). So the intercept ($\beta_{0}$; <code>intrcpt</code>) is the pooled $SMD$ for the subgroup of *both* ($\text{SMD}_{both}$ = -0.7107, $\text{95%CI}$ = [-1.5835, 0.1621], $p-value$ = 0.1026). The other two coefficients represent how much higher the pooled $SMD$ is for the subgroups of *female* ($\beta_{1}$) and "male" ($\beta_{2}$), respectively, compared to the "reference" level (subgroup of *both* - intercept, $\beta_{0}$). We can obtain the pooled $SMD$ for the subgroups of *female* ($\beta_{1}$) and *male* ($\beta_{2}$) by adding their <code>estimate</code> to the <code>estimate</code> of the "reference" level (i.e., <code>intrcpt</code>). Therefore, the pooled $SMD$ for *female* and *male* are 0.116 ($\beta_{0} + \beta_{1}$ = -0.7107 + 0.8267) and -0.6063 ($\beta_{0} + \beta_{2}$ = -0.7107 + 0.1044). The corresponding $p-value$ (<code>pval</code>) and $\text{95%CI}$ (<code>ci.lb</code>, <code>ci.ub</code>) indicate that neither subgroup has a significant influence on the SSRI effect (the results of **Test of Moderators** also confirm this result: <code>F(df1 = 2, df2 = 14)</code> = 2.2580 and <code>p-val</code> = 0.1413 indicates that we can reject the null hypothesis  $H0:\beta_{1}=\beta_{2}=0$).
+Results under **Model Results** report the estimates of all model coefficients and their significance tests. The moderator Sex has three levels: male, female or both. By default, <code>R</code> will alphabetize the dummy-coded variable (in this case, *Sex*). The subgroup of *both* is set as the "reference" level and left out the model (because the letter "b" [*both*] comes before "f" [*female*] and "m" [*male*]). So the intercept ($\beta_{0}$; <code>intrcpt</code>) is the pooled $SMD$ for the subgroup of *both* ($\text{SMD}_{both}$ = -0.7107, $\text{95%CI}$ = [-1.5835, 0.1621], $p-value$ = 0.1026). The other two coefficients represent how much higher the pooled $SMD$ is for the subgroups of *female* ($\beta_{1}$) and "male" ($\beta_{2}$), respectively, compared to the "reference" level (subgroup of *both* - intercept, $\beta_{0}$). We can obtain the pooled $SMD$ for the subgroups of *female* ($\beta_{1}$) and *male* ($\beta_{2}$) by adding their <code>estimate</code> to the <code>estimate</code> of the "reference" level (i.e., <code>intrcpt</code>). Therefore, the pooled $SMD$ for *female* and *male* are 0.116 ($\beta_{0} + \beta_{1}$ = -0.7107 + 0.8267) and -0.6063 ($\beta_{0} + \beta_{2}$ = -0.7107 + 0.1044). The corresponding $p-value$ (<code>pval</code>) and $\text{95%CI}$ (<code>ci.lb</code>, <code>ci.ub</code>) indicate that neither subgroup has a significant influence on the SSRI effect (the results of **Test of Moderators** also confirm this result: <code>F(df1 = 2, df2 = 14)</code> = 2.2580 and <code>p-val</code> = 0.1413 indicates that we can reject the null hypothesis $H0:\beta_{1}=\beta_{2}=0$).  
 
-By using a different syntax strategy, we can directly obtain the pooled $SMD$ for each subgroup. To achieve this, we need to add <code>-1</code> at the end of <code>mods = ~ Sex</code> (i.e., <code>mods = ~ Sex -1</code>). <code>-1</code> means that the intercept ($\beta_{0}$) will be removed the meta-regression model. The whole code is:
+By using a different syntax strategy, we can directly obtain the pooled $SMD$ for each subgroup. To achieve this, we need to add <code>-1</code> at the end of <code>mods = ~ Sex</code> (i.e., <code>mods = ~ Sex -1</code>). <code>-1</code> means that the intercept ($\beta_{0}$) will be removed from the meta-regression model. The whole code is now:  
 
 <pre class="code rsplus">rma.mv(yi = SMD, 
        V = SMDV, 
@@ -629,7 +630,7 @@ By using a different syntax strategy, we can directly obtain the pooled $SMD$ fo
        method = "REML", 
        data = dat_sensory2)</pre>  
 
-**The results of meta-regression corresponding to the strategy of <code>-1</code> (removing the intercept):**
+**The results of meta-regression after removing the intercept (using <code>-1</code> with the moderator parameter):**  
 
 ```{r}
 ### multilevel meta-regression model using sex as a moderator
@@ -646,48 +647,48 @@ mod_multilevel_reg_sex_SMD2 <- rma.mv(yi = SMD,
 summary(mod_multilevel_reg_sex_SMD2)
 ```
 
-Now, under **Test of Moderators (coefficients 1:3):**, <code>coefficients 1:3</code> indicates that null hypothesis $H0:\beta_{0}=\beta_{1}=\beta_{2}=0$ is tested. The results still show that the null hypothesis $H0:\beta_{0}=\beta_{1}=\beta_{2}=0$ is rejected:  <code>F(df1 = 3, df2 = 14)</code> = 2.4084 and <code>p-val</code> = 0.1106. results under **Model Results:** show the pooled pooled $SMD$ for each subgroup, whose values (<code>estimate</code>) are exactly same with those calculated by "adding two estimates" (see above).
+Now, under **Test of Moderators (coefficients 1:3):**, <code>coefficients 1:3</code> indicates that null hypothesis $H0:\beta_{0}=\beta_{1}=\beta_{2}=0$ is tested. The results still show that the null hypothesis $H0:\beta_{0}=\beta_{1}=\beta_{2}=0$ is rejected:  <code>F(df1 = 3, df2 = 14)</code> = 2.4084 and <code>p-val</code> = 0.1106. Results under **Model Results:** show the pooled pooled $SMD$ for each subgroup, whose values (<code>estimate</code>) are exactly the same with those calculated by "adding two estimates" (see above).  
 
-## 4.4 Calculate the goodness-of-fit index 
+## 4.4 Calculate the goodness-of-fit index   
 
-For a multilevel meta-regression model, the goodness-of-fit index $R^2$ is also applicable to quantify the percentage of variance explained by the included moderator variables (@aloe2010alternative). @nakagawa2013general propose to use a general from of $R^2$ - marginal $R^2$, which can be calculated by: 
+For a multilevel meta-regression model, the goodness-of-fit index $R^2$ is also applicable for quantifying the percentage of variance explained by the included moderator variables (@aloe2010alternative). @nakagawa2013general propose to use a general form of $R^2$ - marginal $R^2$, which can be calculated as:  
 
 $$
 R^2_{marginal}=\frac{\sigma_{fixed}^2} {\sigma_{total}^2}=\frac{\sigma_{fixed}^2} {\sigma_{fixed}^2+\sigma_{b}^2+\sigma_{w}^2}, (10)
 $$
-You can easily calculate $R^2_{marginal}$ via the function <code>r2_ml()</code> in our R package <code>orchaRd</code>:
 
-<pre class="code rsplus">r2_ml(mod_multilevel_reg_sex_SMD)</pre> 
+You can easily calculate $R^2_{marginal}$ via the function <code>r2_ml()</code> in our R package <code>orchaRd</code>:  
 
-The first column of the output (<code>R2_marginal</code>) shows that animal sex can explain 21.3% variation.
+<pre class="code rsplus">r2_ml(mod_multilevel_reg_sex_SMD)</pre>   
+
+The first column of the output (<code>R2_marginal</code>) shows that animal sex can explain 21.3% of the variation.  
 
 ```{r}
 r2_ml(mod_multilevel_reg_sex_SMD)
 ```
 
 
-# Section 5 – Animal meta-analysis using emerging effect sizes {.tabset}
+# Section 5 – Animal meta-analysis using emerging effect sizes {.tabset}  
 
-There are three underappreciated standardized effect sizes in the practice of animal mea-analyses:
+There are three underappreciated standardized effect sizes in the practice of animal data meta-analyses:  
 
-- **lnRR**
+- **lnRR**  
 
-The log-transformed response ratio, which uses the natural logarithm of the ratio of means between two arms to measure mean difference to quantify the average treatment effect.
+The log-transformed response ratio, which uses the natural logarithm of the ratio of means between two groups to quantify the mean difference or average treatment effect.  
 
-- **lnVR**
+- **lnVR**  
 
-The log-transformed variability ratio, which can quantify the difference in variance (standard deviation) around the mean between two arms and estimate inter-individual variability between two arms (heterogeneity of treatment effect).
+The log-transformed variability ratio, which can quantify the difference in variance (standard deviation) around the mean between two groups and estimate inter-individual variability between two groups (heterogeneity of a treatment effect).  
 
-- **lnCVR**
+- **lnCVR**  
 
-The log-transformed coefficient of variation ratio, which is a mean-adjusted version of lnVR. In contrast to lnVR, lnCVR controls for 
-the indirect impact of mean on its variability (i.e., accounting for the mean-variance relationship). 
+The log-transformed coefficient of variation ratio, which is a mean-adjusted version of lnVR. In contrast to lnVR, lnCVR controls for the indirect impact of mean on its variability (i.e., accounting for the mean-variance relationship).  
 
-In our main text, we elaborate on their formulas, statistical merits and (neuro)biological meaning in the context of animal meta-analysis. Here we show how to calculate their effect sizes and sampling variances and how to conduct meta-analysis on them.
+In our main text, we elaborate on the formulas, statistical merits and (neuro)biological meaning of these underutilised effect sizes in the context of animal data meta-analysis. Here we show how to calculate these effect sizes and their sampling variances and how to conduct a meta-analysis on them.  
 
-## 5.1 meta-analysis of mean (lnRR)
+## 5.1 Meta-analysis of mean (lnRR)  
 
-lnRR and corresponding sampling variance can be computed via `escal()` function. Positive values of lnRR represent that the perinatal SSRI exposure has a positive effect on offspring's sensory processing function. The `R` syntax is similar to the calculation of SMD in **Section 1**: 
+lnRR and corresponding sampling variance can be computed via `escal()` function. Positive values of lnRR indicate that the perinatal SSRI exposure has a positive effect on offspring's sensory processing function. The `R` syntax is similar to the calculation of SMD shown in **Section 1**:   
 
 <pre class="code rsplus">lnRR <- escalc(measure = "ROM", # "ROM" means the ratio of mean differences (log scale) - lnRR;
                m1i = SSRI_Mean, # mean of treatment group (SSRI);
@@ -717,7 +718,7 @@ metrics_set2 <- data.frame(lnRR = lnRR$yi, lnRRV = lnRR$vi)
 dat_sensory2 <- cbind(dat_sensory2, metrics_set2) 
 ```
 
-We can use <code>rma.mv()</code> to fit a 3-level meta-analytic model to lnRR:
+We can use <code>rma.mv()</code> to fit a 3-level meta-analytic model with lnRR as an effect size:   
 
 <pre class="code rsplus">mod_multilevel_lnRR <- rma.mv(yi = lnRR, # lnRR is specified as the effect size measure;
                               V = lnRRV, # sampling variance of lnRR;
@@ -725,7 +726,7 @@ We can use <code>rma.mv()</code> to fit a 3-level meta-analytic model to lnRR:
                                            ~1 | Obs_ID), # a random effect that makes the true effect sizes vary within studies (variation within studies);
                               test = "t",
                               method = "REML", 
-                              data = dat_sensory2)</pre>
+                              data = dat_sensory2)</pre>  
 
 ```{r}
 ### multilevel model on lnRR
@@ -738,19 +739,19 @@ mod_multilevel_lnRR <- rma.mv(yi = lnRR,
                               data = dat_sensory2)
 ```
 
-Let's have a look at the model results:
+Let's have a look at the model results:   
 
 ```{r}
 summary(mod_multilevel_lnRR)
 ```
 
-Under `Model Results` we can see that the pooled lnRR is not statistically significant ($\beta_{0}$ = -0.106, 95% CIs = [0.248 to 0.036], `p-value` = 0.133), which aligns with the model estimate of SMD. By definition of lnRR, the $\beta_{0}$ = -0.106 shows the multiplicative effects (log scale mean ratio), which is different from the additive effects of SMD. Therefore, it is easy to ease the interpretation of lnRR by back-transformed it to the original scale mean ratio: `exp(-0.106) - 1` = -0.10. This means the SSRI exposure can reduce the sensory function by 10%, albeit it is not statistically significant. 
+Under `Model Results` we can see that the pooled lnRR is not statistically significant ($\beta_{0}$ = -0.106, 95% CIs = [0.248 to 0.036], `p-value` = 0.133), which aligns with the model estimate for SMD effect sizes. By definition of lnRR, the $\beta_{0}$ = -0.106 shows the multiplicative effects (log scale mean ratio), which is different from the additive effects of SMD. Therefore, it is easy to ease the interpretation of lnRR by back-transforming it to the original scale of mean ratio: `exp(-0.106) - 1` = -0.10. This number means that the SSRI exposure can reduce the sensory function by 10%, albeit it is not a statistically significant effect.  
 
-We contend that it is a good practice to report both additive effects using SMD and multiplicative effects using lnRR when conducting animal meta-analysis of mean. Moreover, the dual use of these two types of effect size can serve as a sensitivity analysis, which can be used to examine the robustness of the meta-analytic evidence.
+We contend that it is a good practice to report both additive effects using SMD and multiplicative effects using lnRR when conducting animal meta-analysis of mean. Moreover, the dual use of these two types of effect size can serve as a sensitivity analysis, which can be used to examine the robustness of the meta-analytic evidence.  
 
-## 5.2 meta-analysis of variation (lnVR and lnCVR)
+## 5.2 Meta-analysis of variation (lnVR and lnCVR)   
 
-The calculation of the variance based effect size (lnVR and lnCVR) is also ready in `escal()` function. Positive values of lnVR/lnCVR represent that the perinatal SSRI exposure increase the inter-individual variability differences in offspring's sensory function. You may wonder which one to use when quantifying the variance effect. Basically, it depends on your biological questions (@nakagawa2015meta). But there is a general rule you can follow. When there is a mean-variance relationship, namely a larger mean has a larger variance. lnCVR is preferred over lnVR. Because lnCVR represents mean-adjusted variance effect (relative variance), while lnVR is a solely dependent on variance effect (absolut variance). In @ramsteijn2020perinatal's dataset, there is a clear mean-variance effect both in SSRI exposure group and vehicle group. Therefore, we would choose to calculate lnCVR and its sampling variance:
+The calculation of the variance-based effect sizes (lnVR and lnCVR) is also already implemented in the `escal()` function. Positive values of lnVR or lnCVR indicate that the perinatal SSRI exposure increases the inter-individual variability differences in offspring's sensory function. You may wonder which one to use when quantifying the variance effect. Basically, it depends on your biological questions (@nakagawa2015meta). But there is a general rule you can follow. When there is a mean-variance relationship, namely a larger mean has a larger variance, lnCVR is preferred over lnVR. This is because lnCVR represents mean-adjusted variance effect (relative variance), while lnVR is a solely dependent on variance effect (absolute variance). In @ramsteijn2020perinatal's dataset, there is a clear mean-variance effect both in SSRI exposure group and vehicle group. Therefore, we would choose to calculate lnCVR and its sampling variance:   
 
 
 <pre class="code rsplus">lnVR <- escalc(measure = "CVR", # "CVR" means the variation coefficient ratio (log scale); lnVR can be specified as measure = "VR";
@@ -761,7 +762,7 @@ The calculation of the variance based effect size (lnVR and lnCVR) is also ready
                n1i = SSRI_Nadj, # sample size of treatment group; 
                n2i = Vehicle_Nadj, # sample size of control group; 
                data = dat_sensory, # dataset of our work example;
-               append = FALSE)</pre>  
+               append = FALSE)</pre>   
 
 
 ```{r}
@@ -783,7 +784,7 @@ metrics_set3 <- data.frame(lnCVR = lnCVR$yi, lnCVRV = lnCVR$vi)
 dat_sensory2 <- cbind(dat_sensory2, metrics_set3) # bind_cols()
 ```
 
-Let's use <code>rma.mv()</code> to fit a 3-level meta-analytic model to lnCVR:
+Let's use <code>rma.mv()</code> to fit a 3-level meta-analytic model to lnCVR:  
 
 <pre class="code rsplus">mod_multilevel_lnCVR <- rma.mv(yi = lnRR, # lnCVR is specified as the effect size measure;
                                V = lnRRV, # sampling variance of lnCVR;
@@ -791,9 +792,9 @@ Let's use <code>rma.mv()</code> to fit a 3-level meta-analytic model to lnCVR:
                                              ~1 | Obs_ID), # a random effect that makes the true effect sizes vary within studies (variation within studies);
                                test = "t",
                                method = "REML", 
-                               data = dat_sensory2)</pre>
+                               data = dat_sensory2)</pre>  
                             
-Meta-analysis of variation shows that SSRI exposure can increases the inter-individual variability in sensory function (poolsed lnCVR: $\beta_{0}$ = 0.16, 95% CIs = [-0.159 to 0.478], p-value = 0.298). This means SSRI exposure only affects for some animals (individual-specific) and further research on the sources of variability was warranted.
+Meta-analysis of variation shows that SSRI exposure can increases the inter-individual variability in sensory function (pooled lnCVR: $\beta_{0}$ = 0.16, 95% CIs = [-0.159 to 0.478], p-value = 0.298). This means SSRI exposure only affects some animals (individual-specific effect) and further research on the sources of variability is warranted.   
 
 ```{r}
 ### multilevel model on lnRR
@@ -810,14 +811,14 @@ mod_multilevel_lnCVR <- rma.mv(yi = lnCVR,
 summary(mod_multilevel_lnCVR)
 ```
 
-# Section 6 – Test publication bias {.tabset}
+# Section 6 – Test publication bias {.tabset}  
 
-As mentioned in the main text, the common methods to test publication bias will be invalid if effect sizes are statistically dependent. Therefore, funnel plots, Egger’s regression and trim-and-fill tests are not suitable to test publication bias for animal meta-analyses. In this section, we showcase how to properly test two forms of publication bias in the framework of multilevel meta-regression: **small-study** effect and **decline effect**. 
+As mentioned in the main text, the common methods for testing publication bias will be invalid if effect sizes are statistically dependent. Therefore, funnel plots, conventional Egger’s regression and trim-and-fill tests are often not suitable to test publication bias for animal data meta-analyses. In this section, we showcase how to properly test two forms of publication bias in the framework of multilevel meta-regression: **small-study** effect and **decline effect**.  
 
 
-## 6.1 Construct an extended Egger’s regression to test the small-study effect
+## 6.1 Construct an extended Egger’s regression to test the small-study effect  
 
-The first form publication bias is the small-study effect, which occurs when small studies (small sample size) tend to report large effect sizes. An extended Egger’s regression is equivalent to a multilevel meta-regression with sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) as a continuous moderator variable. Accordingly, it can be fitting via specifying <code>mods = ~ SMDSE</code>:
+The first form publication bias is the small-study effect, which occurs when small studies (with small sample sizes) tend to report large effect sizes. An extended Egger’s regression is equivalent to a multilevel meta-regression with sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) as a continuous moderator variable. Accordingly, it can be fitted via specifying <code>mods = ~ SMDSE</code>:   
 
 <pre class="code rsplus">rma.mv(yi = SMD, 
        V = SMDV, 
@@ -825,13 +826,13 @@ The first form publication bias is the small-study effect, which occurs when sma
        mods = ~ SMDSE, # sampling error (squart root of sampling variance SMDV);
        test = "t",
        method = "REML", 
-       data = dat_sensory2)</pre>  
+       data = dat_sensory2)</pre>   
 
-See **Interpretations of the small-study effect test** for how to interpret extended Egger’s regression's results.
+See **Interpretations of the small-study effect test** below for how to interpret extended Egger’s regression's results.   
 
-## 6.2 Interpretations of the small-study effect test
+## 6.2 Interpretations of the small-study effect test  
 
-**The outputs of a typical extended Egger’s regression model looks:**
+**The printed output of a typical extended Egger’s regression model looks like this:**   
 
 ```{r}
 ### calculate sampling error for SMD
@@ -850,7 +851,7 @@ pb_small.study.effect_SMD <- metafor::rma.mv(yi = SMD,
 summary(pb_small.study.effect_SMD)
 ```
 
-Under **Model Results**, we can see that the regression slope of the extended Egger's regression is <code>sqrt(SMDSE)</code> = -2.8426, which is not statistically different from zero (<code>t_value</code> = -1.5962 and <code>p-val</code> = 0.1313). This means smaller studies (larger sampling error [$se_{[i]}=\sqrt{\nu_{[i]}}$]) does not have larger effect effect sizes (Figure S5): no small-study effect exists in this dataset. The non-significant slope <code>sqrt(SMDSE)</code> = -2.8426 also indicates that data is symmetrically distributed on the funnel plot (Figure S6).
+Under **Model Results**, we can see that the regression slope of the extended Egger's regression is <code>sqrt(SMDSE)</code> = -2.8426, which is not statistically different from zero (<code>t_value</code> = -1.5962 and <code>p-val</code> = 0.1313). This means smaller studies (with larger sampling error [$se_{[i]}=\sqrt{\nu_{[i]}}$]) do not have larger effect sizes (Figure S5), i.e. no small-study effect exists in this dataset. The non-significant slope <code>sqrt(SMDSE)</code> = -2.8426 also indicates that data is symmetrically distributed in the funnel plot (Figure S6).  
 
 ```{r}
 # visualize the extended Egger's regression model
@@ -862,8 +863,8 @@ pb_small.study.effect_SMD_plot <- bubble_plot(pb_small.study.effect_SMD, mod = "
 pb_small.study.effect_SMD_plot
 ```
 
-### Figure S5 
-A bubble plot showing the relationship between effect size estimates (SMD) and their sampling error (SE) can be used to detect the small-study effect (funnel plot asymmetry). This bubble plot can be made using <code>bubble_plot()</code> function in <code>orchaRd</code> package (@nakagawa2021orchard).
+### Figure S5   
+A bubble plot showing the relationship between effect size estimates (SMD) and their sampling error (SE) can be used to detect the small-study effect (funnel plot asymmetry). This bubble plot can be made using <code>bubble_plot()</code> function in <code>orchaRd</code> package (@nakagawa2021orchard).  
 
 ```{r}
 # make a funnel plot
@@ -872,29 +873,32 @@ funnel(mod_multilevel_SMD, yaxis = "seinv",
        xlab = "Effect size estimates (SMD)")
 ```
 
-### Figure S6
-Visual inspection of the funnel plot to identify the small-study effect. 
+### Figure S6  
+Visual inspection of the funnel plot to identify the small-study effect.   
 
-The interpretations of other outputs of the extended Egger’s regression model are same to those in a multilevel meta-regression, including:
-- **Multivariate Meta-Analysis Model**
+The interpretations of other outputs of the extended Egger’s regression model are the same to those in a multilevel meta-regression, including:  
 
-- **Variance Components**
+- **Multivariate Meta-Analysis Model**  
 
-- **Test for Residual Heterogeneity**
+- **Variance Components**  
 
-- **Test of Moderators**
+- **Test for Residual Heterogeneity**  
 
-- **Model Results** 
+- **Test of Moderators**  
 
-You can refer to **Interpretations of a multilevel meta-analytic model** in Step 3 for thorough interpretations. 
+- **Model Results**  
 
-Of note, when using SMD as a effect size metric, using Egger’s test to identify small-study effect may produce false-positive results. If you have a look at the formula used to compute SMD's SE (which can be found elsewhere), you may realise that SMD is artifactually correlated with its SE , meaning that SMD's SE is dependent on SMD. @nakagawa2022methods propose to use an adapted SE when using Egger's regression to test the small-study effect on SMD. The adapted SE is based on the effective sample size:
+You can refer to **Interpretations of a multilevel meta-analytic model** in Step 3 for thorough descriptions of interpretations.  
+
+Of note, when using SMD as an effect size metric, using Egger’s test to identify small-study effect may produce false-positive results. If you have a look at the formula used to compute SMD's SE (which can be found elsewhere), you may realise that SMD is artifactually correlated with its SE , meaning that SMD's SE is dependent on SMD. @nakagawa2022methods propose to use an adapted SE when using Egger's regression to test the small-study effect on SMD. The adapted SE is based on the effective sample size:  
+
 $$
 \sqrt{\frac {1} { \tilde{N} }}  =
 \sqrt{\frac {1} { N_\text{T}} + \frac{1}{N_\text{C}}},
 $$
-Therefore, it is necessary to conduct a sensitivity analysis using this adapted SE to check the robustness of small-study test. This can be easily done by replacing SE with the adapted SE in the extended Egger's regression model. Under **Model Results** (see below), we can see that the slope of the adapted SE 
-<code>sqrt(SMDSE_C)</code> = -1.2521 still shows non-significant (<code>t_value</code> = -0.6042 and <code>p-val</code> = 0.5548), which indicates the the robustness of the small-study test. 
+
+Therefore, it is necessary to conduct a sensitivity analysis using this adapted SE to check the robustness of small-study test. This can be easily done by replacing SE with the adapted SE in the extended Egger's regression model. Under **Model Results** (see below). We can see that the slope of the adapted SE 
+<code>sqrt(SMDSE_C)</code> = -1.2521 still shows non-significant (<code>t_value</code> = -0.6042 and <code>p-val</code> = 0.5548), which indicates the robustness of the small-study test.  
 
 ```{r}
 # calculate modified SE
@@ -913,11 +917,11 @@ pb_small.study.effect_SMD2 <- metafor::rma.mv(yi = SMD,
 summary(pb_small.study.effect_SMD2)
 ```
 
-## 6.3 Construct a multilevel regression model to test the time-lag bias
+## 6.3 Construct a multilevel regression model to test the time-lag bias   
 
-Time-lag bias occurs when statistically significant (aks positive results) tend to publish earlier than those with statistically non-significant findings (aks negative results), leading to a decline in reported effect sizes over time (i.e., decline effect). 
+Time-lag bias occurs when statistically significant ("positive" results) tend to be published earlier than those with statistically non-significant findings ("negative" results), leading to a decline in reported effect sizes over time (i.e., a decline effect).  
 
-Time-lag bias has very important implication to a field, for example, the instability of the cumulative evidence of a given field poses a threat to policy-marking and (pre)clinical decisions. However, this form of publication bias has been rarely tested in the practice of animal meta-analyses. The test of time-lag bias is very straightforward. You only need to add the publication year of the effect size as a continuous moderator variable in a multilevel regression model (equivalent to replacing sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) by publication year): 
+Time-lag bias has a very important implications, for example, the instability of the cumulative evidence of a given field poses a threat to policy-making and (pre)clinical decision-making. However, this form of publication bias has been rarely tested in the practice of animal data meta-analyses. The test for time-lag bias is very straightforward. You only need to add the publication year of the effect size as a continuous moderator variable in a multilevel meta-regression model (equivalent to replacing sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) by publication year):  
 
 <pre class="code rsplus">rma.mv(yi = SMD, 
        V = SMDV, 
@@ -926,13 +930,13 @@ Time-lag bias has very important implication to a field, for example, the instab
        test = "t",
        method = "REML", 
        data = dat_sensory2) 
-</pre>  
+</pre>   
 
-See **Interpretations of the time-lag bias test** for how to interpret time-lag bias test's results.
+See **Interpretations of the time-lag bias test** below for how to interpret time-lag bias test's results.  
 
-## 6.4 Interpretations of the time-lag bias test
+## 6.4 Interpretations of the time-lag bias test   
 
-**The outputs of a typical time-lag bias test looks:**
+**The printed output of a typical time-lag bias test looks like this:**   
 
 ```{r}
 ### create publication year variable
@@ -951,7 +955,7 @@ pb_time.lag.bias_SMD <- metafor::rma.mv(yi = SMD,
 summary(pb_time.lag.bias_SMD)
 ```
 
-Similar to decline effect test, under **Model Results**, we can see that the regression slope is <code>pub_year</code> = 0.0008, which is very small and not statistically different from zero (<code>t_value</code> = 0.0130 and <code>p-val</code> = 0.9898). This means studies with statistically significant findings do not tend to publish earlier than that with negative results: no time-lag bias exists in this dataset. Figure S7 clearly shows that the estimates of SMD remains consistent across different publication year.
+Similarly to the decline effect test, under **Model Results**, we can see that the regression slope is <code>pub_year</code> = 0.0008, which is very small and not statistically different from zero (<code>t_value</code> = 0.0130 and <code>p-val</code> = 0.9898). This means studies with statistically significant findings do not tend to be published earlier than these with "negative" results, i.e. no time-lag bias exists in this dataset. Figure S7 clearly shows that the estimates of SMD remain roughly consistent across different publication years.   
 
 ```{r}
 # visualize the time-lag bias test
@@ -963,32 +967,32 @@ pb_time.lag.bias_SMD_plot <- bubble_plot(pb_time.lag.bias_SMD, mod = "pub_year",
 pb_time.lag.bias_SMD_plot
 ```
 
-### Figure S7 
-A bubble plot showing the relationship between effect size estimates (SMD) and their publication year can be used to detect the time-lag bias (aka decline effect). This bubble plot can be made using <code>bubble_plot()</code> function in <code>orchaRd</code> package (@nakagawa2021orchard).
+### Figure S7   
+A bubble plot showing the relationship between effect size estimates (SMD) and their publication year can be used to detect the time-lag bias (aka decline effect). This bubble plot can be made using <code>bubble_plot()</code> function in <code>orchaRd</code> package (@nakagawa2021orchard).  
 
-The interpretations of other outputs of the extended Egger’s regression model are same to those in a multilevel meta-regression, including (1) **Multivariate Meta-Analysis Model**; (2) **Variance Components**; (3) **Test for Residual Heterogeneity**; (4) **Test of Moderators**; (5) **Model Results**. You can refer to **Interpretations of a multilevel meta-analytic model** in Step 3 for thorough interpretations. 
+The interpretations of other outputs of the extended Egger’s regression model are the same as in a multilevel meta-regression, including (1) **Multivariate Meta-Analysis Model**; (2) **Variance Components**; (3) **Test for Residual Heterogeneity**; (4) **Test of Moderators**; (5) **Model Results**. You can refer to **Interpretations of a multilevel meta-analytic model** section in Step 3 for thorough descriptions of these interpretations.  
 
 
-# Section 7– Select an appropriate random-effect structure {.tabset}
+# Section 7– Select an appropriate random-effect structure {.tabset}  
 
-In this section, we use a more complex animal dataset to show how to select an appropriate random-effect structure, and therefore, to account for various types of non-independence and heterogeneity at different levels. This dataset comes from @lagisz2020optimism, which examined cognition bias across 22 animal species using 71 studies with 459 effect sizes. 
+In this section, we use a more complex animal dataset to show how to select an appropriate random-effect structure, and therefore, to account for various types of non-independence and heterogeneity at different levels. This dataset comes from @lagisz2020optimism, which examined cognition bias across 22 animal species using 71 studies with 459 effect sizes.  
 
-## 7.1 Concepts and rationale
+## 7.1 Concepts and rationale   
 
-When specifying a multilevel meta-analytic model, a practical question to consider is which study-level variables to give random effects. You may wonder what is a 'random effect'? There are many formal definitions (Andrew Gelman has a nice [blog](https://statmodeling.stat.columbia.edu/2005/01/25/why_i_dont_use/) on it). Here, we give a non-statistical definition in the context of meta-analysis: a study-level variable being random-effect means that it varies across different intervention types, doses, and species. When a study-level variable in a meta-analytic model is modeled as being a random-effect, we believe that it has a random effect on the overall mean and contributes noise (variation) to the overall mean. For example, including animal strains/species as a random-effect will allow us to estimate how much variance exists among strains/species. In contrast, when treating strains/species as a fixed-effect, we believe that strains/species levels are identical across different studies and have a systematic effect on the mean (e.g., ask question like, do one species response more effectively to a intervention than others?). A general guideline choosing random-effect factor is that it should contain at least five levels, so that we can properly report variance (@bolker2009generalized).
+When specifying a multilevel meta-analytic model, a practical question to consider is which study-level variables to use as random effects. You may wonder what is a 'random effect'? There are many formal definitions (Andrew Gelman has a nice [blog](https://statmodeling.stat.columbia.edu/2005/01/25/why_i_dont_use/) on it). Here, we give a non-statistical definition in the context of a meta-analysis: a study-level variable being a random-effect means that it varies across different intervention types, doses, and species. When a study-level variable in a meta-analytic model is modeled as being a random-effect, we believe that it has a random effect on the overall mean and contributes noise (variation) to the overall mean. For example, including animal strains/species as a random-effect will allow us to estimate how much variance exists among strains/species. In contrast, when treating strains/species as a fixed-effect, we believe that strains/species levels are identical across different studies and have a systematic effect on the mean (e.g., we ask question like: do one species responds more to an intervention than others?). A general rule of thumb for choosing random-effect factor is that it should contain at least five levels, so that we can properly estimate variance (@bolker2009generalized).   
 
-## 7.2 Choose a random-effect structure based on AIC
+## 7.2 Choose a random-effect structure based on AIC   
 
-Theoretically, any cluster/group variable having more than five level can be a random-effects candidate (e.g., animal species). Should we include every cluster/group variable (> five levels) as a random-effects in the multilevel model? The answer is NO! For a random-effect candidate, you first need to think about whether it is of neurobiologically interesting and true sources of heterogeneity based on your expertise. Then you need to investigate whether this random-effect candidate improve the quality of the multilevel model. In this respect, you need to resort to information-theoretic approaches alongside likelihood methods (likelihood ratio tests). Here, we use @lagisz2020optimism's dataset to show how to decide the best random-effects structure from the view of Akaike Information Criterion (AIC) criteria. 
+Theoretically, any cluster/group variable having more than five levels can be a random-effect candidate. Should we then include every cluster/group variable with more than five levels as a random-effect in a multilevel model? The answer is NO! For a good random-effect candidate, you first need to think about whether it is a potentially true sources of heterogeneity based on your biological expertise. Then you need to investigate whether this random-effect candidate improves the quality of the multilevel model. In this respect, you need to resort to information-theoretic approaches alongside likelihood methods (likelihood ratio tests). Here, we use @lagisz2020optimism's dataset to show how to decide the best random-effects structure from the view of Akaike Information Criterion (AIC) criteria.  
 
-This can be easily done by 
+This can be easily done by:   
 
-- (i) specifying the argument <code>random</code> in <code>rma.mv</code> function with different  random-effects structures; 
+- (i) specifying the argument <code>random</code> in <code>rma.mv</code> function with different random-effects structures;  
 
-- (ii) using <code>anova.rma</code> to provide a full versus reduced model comparison in terms of model fit statistics and a likelihood ratio test (log-likelihood, deviance, AIC, BIC, and AICc).
+- (ii) using <code>anova.rma</code> to provide a full versus reduced model comparison in terms of model fit statistics and a likelihood ratio test (log-likelihood, deviance, AIC, BIC, and AICc).  
 
-### Table S4
-Load data of @lagisz2020optimism.
+### Table S4  
+Load data of @lagisz2020optimism.  
 
 ```{r} 
 # load data
@@ -998,33 +1002,33 @@ t4 <- dat_cognition %>% DT::datatable()
 t4 
 ```
 
-@lagisz2020optimism's dataset has three random-effects candidates:
+@lagisz2020optimism's dataset has three random-effects candidates:  
 
-Effect size identity (*EffectID*) - unique ID for each pairwise comparison used to calculate effect sizes; modelling it as a random-effect means to allow true effect sizes to vary within studies, such that the model can estimate with-study (effect size) level variance ($\sigma_{within}^2$) and partition with-study (effect size) level heterogeneity ($I^2_{within}$);
+Effect size identity (*EffectID*) - unique ID for each pairwise comparison used to calculate effect sizes; modelling it as a random-effect means to allow true effect sizes to vary within studies, such that the model can estimate with-study (effect size) level variance ($\sigma_{within}^2$) and partition with-study (effect size) level heterogeneity ($I^2_{within}$).  
 
-Study identity (*ArticleID*) - unique ID for each extracted original experimental paper; modelling it as a random-effect means to allow true effect sizes to vary across studies, such that the model can estimate between-study level variance ($\sigma_{between}^2$) and partition between-study level heterogeneity ($I^2_{between}$);
+Study identity (*ArticleID*) - unique ID for each extracted original experimental paper; modelling it as a random-effect means to allow true effect sizes to vary across studies, such that the model can estimate between-study level variance ($\sigma_{between}^2$) and partition between-study level heterogeneity ($I^2_{between}$).  
 
-Species identity (*Species_Latin*) - Latin name of an animal species used in the experiment; modelling it as a random-effect means to allow true effect sizes to vary across species, such that the model can estimate species level variance ($\sigma_{species}^2$) and partition species level heterogeneity ($I^2_{species}$). 
+Species identity (*Species_Latin*) - Latin name of an animal species used in the experiment; modelling it as a random-effect means to allow true effect sizes to vary across species, such that the model can estimate species level variance ($\sigma_{species}^2$) and partition species level heterogeneity ($I^2_{species}$).  
 
-Let's fit a null model without any random-effects candidates as the default reduced model:
+Let's fit a null model without any random-effects candidates as the default reduced model:  
 
 <pre class="code rsplus">meta.null <- rma.mv(yi = d, 
                     V = Vd, 
                     data = dat_cognition, 
-                    method = 'ML') # note that when using AIC criteria, maximum likelihood (ML) rather than restricted maximum likelihood (REML) is preferred (for reasons see @anderson2008model)</pre>  
+                    method = 'ML') # note that when using AIC criteria, maximum likelihood (ML) rather than restricted maximum likelihood (REML) is preferred (for reasons see @anderson2008model)</pre>   
 
 ```{r}
 # fit a null model
 meta.null <- rma.mv(yi = d, V = Vd, data = dat_cognition, method = 'ML') 
 ```
 
-Use the argument <code>ramdom</code> to specify EffectID as a random-effects term to account for within-study variation ($\sigma_{within}^2$):
+Use the argument <code>ramdom</code> to specify EffectID as a random-effects term to account for within-study variation ($\sigma_{within}^2$):  
 
 <pre class="code rsplus">meta.effectID <- rma.mv(yi = d, 
                         V = Vd, 
                         random = ~ 1 | EffectID, # the random effect EffectID allows effect sizes vary within studies;
                         data = dat_cognition, 
-                        method = 'ML')</pre> 
+                        method = 'ML')</pre>   
 
 ```{r}
 # add EffectID as a random-effect to account for within-study variation
@@ -1035,46 +1039,46 @@ Examine whether *EffectID* improves model quality via <code>anova.rma</code> fun
 
 <pre class="code rsplus">anova.rma(meta.effectID, meta.null)</pre> 
 
-This will provide full (model with *EffectID* as a random-effects term) versus reduced model (null model without any random-effects term) comparison in terms of model fit statistics and a likelihood ratio test (log-likelihood, deviance, AIC, BIC, and AICc values):
+This will provide full (model with *EffectID* as a random-effects term) versus reduced model (null model without any random-effects term) comparison in terms of model fit statistics and a likelihood ratio test (log-likelihood, deviance, AIC, BIC, and AICc values):  
 
 ```{r}
 # compare meta.effectID and meta.null
 anova.rma(meta.effectID, meta.null)
 ```
 
-We can see that adding *EffectID* as a random-effects term (**meta.effectID**; <code>Full</code>) has a much lower AIC value (1182.1894) compared with the null model (meta.null; <code>Reduced</code>). The log-likelihood ratio test shows that adding *EffectID* as a random-effects term can significantly improve the model fit (<code>LRT</code> = 386.1182, <code>pval</code> = < 0.0001).
+We can see that adding *EffectID* as a random-effects term (**meta.effectID**; <code>Full</code>) results in a much lower AIC value (1182.1894) compared with the null model (meta.null; <code>Reduced</code>). The log-likelihood ratio test shows that adding *EffectID* as a random-effects term can significantly improve the model fit (<code>LRT</code> = 386.1182, <code>pval</code> = < 0.0001).   
 
-Let's examine the importance of *ArticleID* using the same procedures. Specify *ArticleID* as a random-effects term to account between-study variation ($\sigma_{between}^2$):
+Let's examine the importance of *ArticleID* using the same procedure. Specify *ArticleID* as a random-effects term to account between-study variation ($\sigma_{between}^2$):   
 
 <pre class="code rsplus">meta.studyID <- rma.mv(yi = d, 
                        V = Vd, 
                        random = ~ 1 | ArticleID, # the random effect ArticleID allows effect sizes vary between studies;
                        data = dat_cognition, 
-                       method = 'ML')</pre> 
+                       method = 'ML')</pre>  
 
 ```{r}
 ## add ArticleID as a random-effect to account for between-study variation
 meta.studyID <- rma.mv(yi = d, V = Vd, random = ~ 1 | ArticleID, data = dat_cognition, method = 'ML')
 ```
 
-Examine whether *ArticleID* improves model quality via <code>anova.rma</code> function:
+Examine whether *ArticleID* improves model quality via <code>anova.rma</code> function:  
 
-<pre class="code rsplus">anova.rma(meta.meta.studyID, meta.null)</pre> 
+<pre class="code rsplus">anova.rma(meta.meta.studyID, meta.null)</pre>  
 
 ```{r}
 # compare meta.studyID and meta.null
 anova.rma(meta.studyID, meta.null)
 ```
 
-The value of AIC and log-likelihood ratio test show that adding *ArticleID* as a random-effects term can significantly improve the model fit (<code>LRT</code> = 214.5009, <code>pval</code> = < 0.0001).
+The value of AIC and log-likelihood ratio test show that adding *ArticleID* as a random-effects term can significantly improve the model fit (<code>LRT</code> = 214.5009, <code>pval</code> = < 0.0001).   
 
-Let's incorporate both *ArticleID* and *EffectID* the random-effects terms:
+Let's incorporate both *ArticleID* and *EffectID* as the random-effects terms:    
 
 <pre class="code rsplus">meta.study.effectID <- rma.mv(yi = d, 
                               V = Vd, 
                               random = list(~ 1 | ArticleID, ~ 1 | EffectID), # a nested random-effects structure (multiple effect sizes nested within studies) is defined to non-independence due to clustering; An alternative syntax is: <code>random = ~ 1 | ArticleID/EffectID</code>;
                               data = dat_cognition, 
-                              method = 'ML')</pre> 
+                              method = 'ML')</pre>   
                               
 ```{r}
 meta.study.effectID <- rma.mv(yi = d, 
@@ -1084,47 +1088,46 @@ meta.study.effectID <- rma.mv(yi = d,
                               method = 'ML')
 ```
 
-
-By comparing **meta.study.effectID** and **meta.studyID**, we can investigate whether model with both *ArticleID* and *EffectID* as the random-effect terms (which defines the nested random-effects structure) is "better" than that with only *ArticleID* as the random-effects term:
+By comparing **meta.study.effectID** and **meta.studyID**, we can investigate whether model with both *ArticleID* and *EffectID* as the random-effect terms (which defines the nested random-effects structure) is "better" than that with only *ArticleID* as the random-effects term:   
 
 ```{r}
 anova.rma(meta.study.effectID, meta.studyID)
 ```
 
-**The above fit statistics and information criteria corroborate our claim in the main text: multilevel model should incorporate effect size identity and study identity as the default random-effects structure when performing an animal meta-analysis.**
+**The above fit statistics and information criteria corroborate our claim in the main text: multilevel model should incorporate effect size identity and study identity as the default random-effects structure when performing an animal meta-analysis.**  
 
-Next, lets' explore whether animal species is an important random-effects term. First add *Species_Latin* as a random-effects term to **meta.study.effectID** via argument <code>random</code>:
+Next, lets' explore whether animal species identity is an important random-effects term. First add *Species_Latin* as a random-effects term to **meta.study.effectID** via argument <code>random</code>:   
 
 <pre class="code rsplus">meta.species.study.effectID <- rma.mv(yi = d, 
                                       V = Vd, random = list(~ 1 | Species_Latin, ~ 1 | ArticleID, ~ 1 | EffectID), # the random effect *Species_Latin* allows effect sizes vary between species;
                                       data = dat_cognition, 
-                                      method = 'ML', sparse = TRUE)</pre>
+                                      method = 'ML', sparse = TRUE)</pre>  
 
 ```{r}
 meta.species.study.effectID <- rma.mv(yi = d, V = Vd, random = list(~ 1 | Species_Latin, ~ 1 | ArticleID, ~ 1 | EffectID), data = dat_cognition, method = 'ML', sparse = TRUE)
 ```
 
-Then compare it to **meta.study.effectID** using <code>anova.rma</code>:
+Then compare it to **meta.study.effectID** using <code>anova.rma</code>:  
 
 ```{r}
 anova.rma(meta.species.study.effectID, meta.study.effectID)
 ```
 
-We can see that adding animal species as a random-effects tern does not contribute more information to the multilevel model: AIC in **meta.species.study.effectID** (1151.5653; <code>full</code>) is larger than that in **meta.study.effectID** (1149.5653; <code>full</code>). This indicates that cognition bias is consistent across animal species (i.e., only a small amount of heterogeneity between species). We can confirm this point by computing the species level heterogeneity $I^2_{species}$:
+We can see that adding animal species identity as a random-effects term does not contribute more information to the multilevel model: AIC in **meta.species.study.effectID** (1151.5653; <code>full</code>) is larger than that in **meta.study.effectID** (1149.5653; <code>full</code>). This indicates that generally cognition bias is consistent across animal species (i.e., only a small amount of heterogeneity exists between species). We can confirm this point by computing the species level heterogeneity $I^2_{species}$:  
 
 ```{r}
 i2_ml(meta.species.study.effectID)
 ```
 
-Additionally, we use this dataset to show the usefulness of orchard plot over forest plot when the number of effect size (*k*) is very large. Let's use <code>forest()</code> function and <code>orchard_plot()</code> function to visualise the results of the multilevel model with the above selected random-effects structure, separately. From Figure S8, we can see that the forest plot does not work well when visualising a large dataset. In contrast, the orchard plot can clearly show each individual data point and the overall estimate (Figure S9).
+Additionally, we will use this dataset to show the advantage of using orchard plot over forest plot when the number of effect sizes (*k*) is very large. Let's use <code>forest()</code> function and <code>orchard_plot()</code> function to visualise the results of the multilevel model with the above selected random-effects structure, separately. From Figure S8, we can see that the forest plot does not work well when visualising a large dataset. In contrast, the orchard plot can clearly show each individual data point and the overall estimate (Figure S9).  
 
 ```{r}
 # make a default forest plot
 forest(meta.species.study.effectID)
 ```
 
-### Figure S8
-Forest plot showing the results of 459 effect sizes quantifying the animal bias (data from @lagisz2020optimism). 
+### Figure S8  
+Forest plot showing 459 effect sizes used in a meta-analytic model quantifying animal cognitive bias (data from @lagisz2020optimism).   
 
 ```{r}
 # make an orchard plot
@@ -1132,40 +1135,40 @@ orchard_plot(meta.species.study.effectID, mod = "1", xlab = "Standardised mean d
   scale_x_discrete(labels = c("Overall effect (pooled SMD)")) 
 ```
 
-### Figure S9
-Orchard plot (forest-like plot) showing the results of 459 effect sizes quantifying the animal bias (data from @lagisz2020optimism). You can use help(orchard_plot) to look at the corresponding arguments and add more code to make it more elegant (@nakagawa2021orchard).
+### Figure S9  
+Orchard plot (forest-like plot) showing 459 effect sizes used in a meta-analytic model quantifying animal cognitive bias (data from @lagisz2020optimism). You can use help(orchard_plot) to look at the corresponding arguments and add more code to make it more elegant (@nakagawa2021orchard).  
 
 
-# Section 8 – Fit multivariate multilevel meta-regression models {.tabset}
+# Section 8 – Fit multivariate multilevel meta-regression models {.tabset}  
 
 Adding multiple moderators variables as fixed-effects leads to a multi-moderator multilevel meta-regression (i.e., multivariate meta-regression). In this section, we fit a multi-moderator multilevel meta-regression using the complex animal dataset from @lagisz2020optimism.
 
 ## 8.1 Concepts and rationale
 
-In contrast to the single-moderator meta-regression (as illustrated early), a multi-moderator multilevel meta-regression can provide more neurobiological and meta-scientific insights, for example, (1) investigating the interactive effect between two moderator variables, and (2) correcting for publication bias and estimate the bias-adjusted effect size (@kvarven2020comparing). 
+In contrast to the single-moderator meta-regression (as illustrated earlier), a multi-moderator multilevel meta-regression can provide richer meta-scientific insights, for example, by: (1) investigating the interactive effect between two moderator variables, and (2) correcting for publication bias and estimating the bias-adjusted overall effect size (@kvarven2020comparing).  
 
-A more general form of multilevel meta-regression model can be written as: 
+A more general form of multilevel meta-regression model can be written as:   
 $$
 ES_{[i]} = \beta_{0}' + \sum \beta_{mod}x_{[m]} + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (12)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
 
-But for an easy start, let's fit the simplest form of multi-moderator multilevel meta-regression model (two moderator variables without interactive term; see next section): 
+But for an easy start, let's fit the simplest form of a multi-moderator multilevel meta-regression model (two moderator variables without any interactive term; see next section):   
 $$
 ES_{[i]} = \beta_{0}' + \beta_{1}x_{within[i]} + \beta_{2}x_{between[j]} + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (14)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
 
-## 8.2 Fit a multilevel meta-regression to examine the interactive effects
+## 8.2 Fit a multilevel meta-regression to examine the interactive effects  
 
-@lagisz2020optimism has tested five moderator variables. We choose two of them for illustrative purpose:
+@lagisz2020optimism has tested five moderator variables. We choose two of them for illustrative purposes:   
 
-**animal sex** (*Sex*) - sex of tested animals in the compared groups with three levels:  female = only female animals were used; male = only male animals were used; both = both female and male animals were used.
+**animal sex** (*Sex*) - sex of tested animals in the compared groups with three levels:  female = only female animals were used; male = only male animals were used; both = both female and male animals were used.   
 
-**test task type** (*TaskType*) - type of the task used during behavioural trials with two levels: active choice = go/go tasks in which an animal is required to make an active response to cues perceived as positive and to cues perceived as negative; go/no-go = tasks in which an animal is required to suppress a response to cues perceived as negative and actively respond only to cues perceived as positive.
+**test task type** (*TaskType*) - type of the task used during behavioural trials with two levels: active choice = go/go tasks in which an animal is required to make an active response to cues perceived as positive and to cues perceived as negative; go/no-go = tasks in which an animal is required to suppress a response to cues perceived as negative and actively respond only to cues perceived as positive.  
 
-Let's create a crosstab (contingency table) to display the combination of factor levels of *Sex* and *TaskType* (Table S5).
+Let's create a cross tabulation (contingency table) to display the combination of factor levels of *Sex* and *TaskType* (Table S5).  
 
-### Table S5
-a crosstab displaying the combination of factor levels of *Sex* and *TaskType*.
+### Table S5  
+A cross tabulation displaying the combinations of factor levels of *Sex* and *TaskType*.  
 
 ```{r}
 t5 <- table(dat_cognition$Sex, dat_cognition$TaskType)
@@ -1173,7 +1176,7 @@ rmdformats::pilltabs(t5)
 ```
 
 
-By specifying argument <code>mods</code> with a formula of <code>~ Sex + TaskType -1</code> (I guess you still remember the trick of <code>-1</code>), we can fit a multivariate meta-regression model with these two moderators with:
+By specifying argument <code>mods</code> with a formula of <code>~ Sex + TaskType -1</code> (remember the trick of <code>-1</code>?), we can fit a multivariate meta-regression model with these two moderators with:  
 
 <pre class="code rsplus">maregression_sex.task <- rma.mv(yi = d, 
                                 V = Vd, 
@@ -1181,7 +1184,7 @@ By specifying argument <code>mods</code> with a formula of <code>~ Sex + TaskTyp
                                 mod = ~ Sex + TaskType -1, # model animal sex and test task type simultaneously;
                                 data = dat_cognition, 
                                 method = 'REML', # remember to change the method used to estimate variance back to restricted maximum likelihood (REML); 
-                                sparse = TRUE)</pre>
+                                sparse = TRUE)</pre>  
                                 
 ```{r}
 maregression_sex.task <- rma.mv(yi = d, 
@@ -1195,13 +1198,15 @@ maregression_sex.task <- rma.mv(yi = d,
 summary(maregression_sex.task)
 ```
 
-Under <code>Model Results</code>, we can see that for the moderator *Sex*,  only "male" and "mixed-sex" show statistically significant effect on cognition bias ($\beta_{0}$ = 0.549, 95% CIs = [0.246 to 0.851] and $\beta_{0}$ = 0.368, 95% CIs = [0.030 to 0.706], respectively). Below we show that "female" also has statistically significant effect on cognition bias when controlling for the confounding effect of of *TaskType*. 
+Under <code>Model Results</code>, we can see that for the moderator *Sex*,  only "male" and "mixed-sex" show statistically significant effect on cognition bias ($\beta_{0}$ = 0.549, 95% CIs = [0.246 to 0.851] and $\beta_{0}$ = 0.368, 95% CIs = [0.030 to 0.706], respectively). Below we show that "female" also has statistically significant effect on cognition bias when controlling for the confounding effect of of *TaskType*.  
 
-Suppose that the relationship between animal sex and effect size estimates differs for different types of behavioral assay. We can test this hypothesis by modelling the interaction between the two moderator variables: 
+Suppose that the relationship between animal sex and effect size estimates differs for different types of behavioral assay. We can test this hypothesis by modelling the interaction between the two moderator variables:  
+
 $$
 ES_{[i]} = \beta_{0}' + \beta_{1}x_{within[i]} + \beta_{2}x_{between[j]} + \beta_{3}x_{within[i]}x_{between[j]} + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (12)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
-You can use the argument <code>mods</code> in <code>rma.mv()</code> to define the interaction between animal sex (*Sex*) and types of behavioral assay (*TaskType*). The core syntax is to use * to connect the two moderator variables (<code>mod = ~ Sex*TaskType -1</code>): 
+
+You can use the argument <code>mods</code> in <code>rma.mv()</code> to define the interaction between animal sex (*Sex*) and types of behavioral assay (*TaskType*). The core syntax is to use * to connect the two moderator variables (<code>mod = ~ Sex*TaskType -1</code>):  
 
 <pre class="code rsplus">maregression_interaction <- rma.mv(yi = d, 
                                 V = Vd, 
@@ -1209,7 +1214,7 @@ You can use the argument <code>mods</code> in <code>rma.mv()</code> to define th
                                 mod = ~ Sex*TaskType -1, # model the interaction;
                                 data = dat_cognition, 
                                 method = 'REML', 
-                                sparse = TRUE)</pre>
+                                sparse = TRUE)</pre>  
                                 
 ```{r}
 # model the interactive effect between two moderator variables
@@ -1223,27 +1228,29 @@ maregression_interaction <- rma.mv(yi = d,
 
 ```
 
-The outputs of the multilevel model with interaction term are similar to a “normal” meta-regression as shown early:
+The printed output of the multilevel model with interaction term are similar to these from a “normal” meta-regression shown earlier:   
 
 ```{r}
 summary(maregression_interaction)
 ```
 
-Under <code>Model Results</code>, now we see that "female" has a statistically significant effect on cognition bias ($\beta_{0}$ = 0.793, 95% CIs = [0.234 to 1.352]). Moreover, the last two lines provide the model estimates for the interactive effects. We can see that the interaction between animal sex and types of behavioral assay is statistically significant. The two moderator variables including their interaction can explain 10.6% variation among effect sizes (via <code>r2_ml</code> function).
+Under <code>Model Results</code>, now we see that "female" has a statistically significant effect on cognition bias ($\beta_{0}$ = 0.793, 95% CIs = [0.234 to 1.352]). Moreover, the last two lines provide the model estimates for the interactive effects. We can see that the interaction between animal sex and type of behavioral assay is statistically significant. The two moderator variables including their interaction can explain 10.6% variation among effect sizes (via <code>r2_ml</code> function).  
 
 ```{r}
 r2_ml(maregression_interaction)
 ```
 
-## 8.3 Correct for publication bias to estimate adjusted effect size
+## 8.3 Correct for publication bias to estimate adjusted effect size  
 
-We have illustrated how to use univariate multilevel meta-regression to identify two forms of publication bias: small-study effect and decline effect (aka time-lag bias). A multi-moderator multilevel meta-regression with effect size's sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and centred publication year ($c(year_{[i]})$; see below for explanations) can be used to correct for the impacts of the two forms of publication bias:
+We have illustrated how to use univariate multilevel meta-regression to identify two forms of publication bias: small-study effect and decline effect (aka time-lag bias). A multi-moderator multilevel meta-regression with effect size's sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and centred publication year ($c(year_{[i]})$; see below for explanations) can be used to correct for the impacts of the two forms of publication bias:   
+
 $$
 ES_{[i]} = \beta_{0}' + \beta_{1}se_{[i]} + \beta_{2}c(year_{[i]}) + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (16)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
-We see that the intercept $\beta_{0}'$ shows the expected effect size estimate when the sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and centred publication year ($c(year_{[i]})$) of an effect size equal to zero. $se_{[i]}$ = 0 means the precision of an effect size is infinitely large (precision = $\frac {1} {se_{[i]}}$), which indicates there is no small-study effect. $c(year_{[i]})$ = 0 means there is no decline effect (i.e., time-lag bias). Therefore, intercept $\beta_{0}'$ can be interpreted as the publication-bias corrected effect size (@nakagawa2022methods; @stanley2017finding). 
 
-We can fit model 16 to @lagisz2020optimism's dataset with the syntax:
+The intercept $\beta_{0}'$ shows the expected effect size estimate when the sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and centred publication year ($c(year_{[i]})$) of an effect size are equal to zero. $se_{[i]}$ = 0 means the precision of an effect size is infinitely large (precision = $\frac {1} {se_{[i]}}$), which indicates there is no small-study effect. $c(year_{[i]})$ = 0 means there is no decline effect (i.e., time-lag bias). Therefore, intercept $\beta_{0}'$ can be interpreted as the publication-bias corrected effect size (@nakagawa2022methods; @stanley2017finding).   
+
+We can fit model 16 to @lagisz2020optimism's dataset using this syntax:  
 
 <pre class="code rsplus">maregression_pb <- rma.mv(yi = d, 
                           V = Vd, 
@@ -1251,10 +1258,9 @@ We can fit model 16 to @lagisz2020optimism's dataset with the syntax:
                           mod = ~ sed + Year.c, # sed = the sampling error (square root of sampling variance Vd); Year.c = the centered year (set mean year as 0), such that the model intercept is meaningful to be interpreted as a bias-corrected overall effect;
                           data = dat_cognition, 
                           method = 'REML', # remember to change the method used to estimate variance back to restricted maximum likelihood (REML); 
-                          sparse = TRUE)</pre>
+                          sparse = TRUE)</pre>  
 
 ```{r}
-
 # calculate the sampling error
 dat_cognition$sed <- sqrt(dat_cognition$Vd)
 
@@ -1270,7 +1276,7 @@ maregression_pb <- rma.mv(yi = d,
                           sparse = TRUE)
 ```
 
-Under <code>Model Results</code>, <code>sed</code> and <code>Year.c</code> are the regression slopes of sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and publication year $c(year_{[i]})$: $\beta_{1}$ and $\beta_{2}$in model 16, respectively. We can see a statistically significant <code>sed</code> = 1.1561 (<code>p-value</code> = 0.0003), indicating there is a small-study effect (Figure S10). <code>Year.c</code> = -0.0002 is not statistically significant (<code>p-value</code> = 0.9931), suggesting that there is no decline effect (Figure S11). 
+Under <code>Model Results</code>, <code>sed</code> and <code>Year.c</code> are the regression slopes of sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and publication year $c(year_{[i]})$: $\beta_{1}$ and $\beta_{2}$in model 16, respectively. We can see a statistically significant <code>sed</code> = 1.1561 (<code>p-value</code> = 0.0003), indicating there is a small-study effect (Figure S10). <code>Year.c</code> = -0.0002 is not statistically significant (<code>p-value</code> = 0.9931), suggesting that there is no decline effect (Figure S11).  
 
 ```{r}
 summary(maregression_pb) 
@@ -1284,8 +1290,8 @@ bubble_plot(maregression_pb, mod = "sed",
             data = dat_cognition, legend.pos = "none") 
 ```
 
-### Figure S10
-The relationship between effect size estimates (SMD) and their sampling error indicates a small-study effect.
+### Figure S10  
+The relationship between effect size estimates (SMD) and their sampling errors indicates existence of a small-study effect.  
 
 ```{r}
 # bubble plot showing the relationship between effect size and publication year - decline effect
@@ -1295,15 +1301,17 @@ bubble_plot(maregression_pb, mod = "Year.c",
             data = dat_cognition, legend.pos = "none") 
 ```
 
-### Figure S11
-The relationship between effect size estimates (SMD) and their publication year indicates no decline effect (time-lag bias).
+### Figure S11  
+The relationship between effect size estimates (SMD) and their publication year indicates no decline effect (time-lag bias).  
 
 
-One point of note here: simulation study indicates that $\beta_{0}'$ tends to underestimate the "true" effect (bias-corrected effect) if there is a nonzero treatment effect (i.e., $\beta_{0}'$ is statistically significant at the 10% significance level; Stanley et al., 2017). In such as a case, replacing the sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) by its sampling variance ($se_{[i]}^2=\nu_{[i]}$) can reduce the bias of the estimated "true" effect (bias-corrected effect): 
+One point of note here: simulation study indicates that $\beta_{0}'$ tends to underestimate the "true" effect (bias-corrected effect) if there is a nonzero treatment effect (i.e., $\beta_{0}'$ is statistically significant at the 10% significance level; Stanley et al., 2017). In such as a case, replacing the sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) by its sampling variance ($se_{[i]}^2=\nu_{[i]}$) can reduce the bias of the estimated "true" effect (bias-corrected effect):  
+
 $$
 ES_{[i]} = \beta_{0}' + \beta_{1}se_{[i]}^2 + \beta_{2}c(year_{[i]}) + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (17)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
-Given that $\beta_{0}'$ is statistically significant at the 10% significance level (<code>p-value</code> = 0.0725 < 0.1), we fit model 17 to correct for the publication bias:
+
+Given that $\beta_{0}'$ is statistically significant at the 10% significance level (<code>p-value</code> = 0.0725 < 0.1), we now fit model 17 to correct for the publication bias:  
 
 <pre class="code rsplus">maregression_pb2 <- rma.mv(yi = d, 
                           V = Vd, 
@@ -1311,7 +1319,7 @@ Given that $\beta_{0}'$ is statistically significant at the 10% significance lev
                           mod = ~ Vd + Year.c, # repalcing sampling error (sed) by sampling variance (Vd) avoid downwardly biased estimate of the bias-corrected overall effect (i.e., model intercept);
                            data = dat_cognition, 
                            method = 'REML', 
-                           sparse = TRUE)</pre>
+                           sparse = TRUE)</pre>  
 
 ```{r}
 # replace sampling error by its variance
@@ -1324,7 +1332,7 @@ maregression_pb2 <- rma.mv(yi = d,
                           sparse = TRUE)
 ```
 
-Let's have a look at the model outputs:
+Let's have a look at the model outputs:  
 
 ```{r}
 summary(maregression_pb2) 
@@ -1332,11 +1340,13 @@ summary(maregression_pb2)
 
 <code>intrcpt</code> under <code>Model Results</code> is the estimate of model intercept ($\beta_{0}'$), indicating that the estimated bias-corrected overall effect is negligible ($\beta_{0}'$ = -0.006, 95% CIs = [-0.172 to 0.160], <code>p-value</code> = 0.943).
 
-In our main text, we also mention that it is best to account for the potential heterogeneity when testing publication bias (because high heterogeneity may invalidate publication bias test): 
+In our main text, we also mention that it is best to account for the potential heterogeneity when testing publication bias (because high heterogeneity may invalidate publication bias test):  
+
 $$
 ES_{[i]} = \beta_{0}' + \beta_{1}se_{[i]}^2 + \beta_{2}c(year_{[i]}) + \sum \beta_{mod}x_{[m]} + \mu_{between[j]} + \mu_{within[i]} + e_{[i]}, (18)\\ \mu_{between[j]} \sim N(0,\sigma_{between}^2)\\ \mu_{within[i]} \sim N(0,\sigma_{within}^2)\\ e_{[i]} \sim N(0,\nu_{[i]})
 $$
-Such a complex model can be fitted with:
+
+Such a complex model can be fitted as:  
 
 <pre class="code rsplus">maregression_pb3 <- rma.mv(yi = d, 
                            V = Vd, 
@@ -1346,7 +1356,7 @@ Such a complex model can be fitted with:
                            method = 'REML', 
                            sparse = TRUE))</pre>
                            
-The regression slopes of sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and publication year $c(year_{[i]})$ have similar results with that without accounting for heterogeneity, although the exact values are different.
+The regression slopes of sampling error ($se_{[i]}=\sqrt{\nu_{[i]}}$) and publication year $c(year_{[i]})$ are similar to these without accounting for heterogeneity, although the exact values are different.  
 
 ```{r}
 # add other important moderator variables to accommodate the potential heterogeneity in the dataset
@@ -1361,13 +1371,13 @@ summary(maregression_pb3)
 ```
 
 
-# Section 9– Construct variance-covariance matrix to account for correlated/non-independent errors {.tabset}
+# Section 9 – Construct variance-covariance matrix to account for correlated/non-independent errors {.tabset}  
 
-As we shown in the main text, multiple effect sizes from the same study can result in two types of data non-independence: <strong>non-independence between effect size estimates</strong> (i.e., correlated effect size) and non-independence between sampling errors (i.e., correlated errors). The use of multilevel model with an appropriate random-effects structure can only capture the non-independence between effect size estimates. In this section, we show how to use a variance-covariance (**VCV**) matrix to capture the non-independence between sampling errors.
+As we shown in the main text, multiple effect sizes from the same study can result in two types of data non-independence: <strong>non-independence between effect size estimates</strong> (i.e., correlated effect size) and non-independence between sampling errors (i.e., correlated errors). The use of multilevel model with an appropriate random-effects structure can only capture the non-independence between effect size estimates. In this section, we show how to use a variance-covariance (**VCV**) matrix to capture the non-independence between sampling errors.  
 
 ## 9.1 Concepts and rationale
 
-Non-independence among sampling errors means sampling errors within the same study (e.g., $se_{1}$ and $se_{2}$) are correlated with each other ($\rho_{12}\neq0$), resulting non-zero covariances (e.g., $Cov[\nu_{1},\nu_{2}]=\rho_{12}se_{1}se_{2}$):
+Non-independence among sampling errors means sampling errors within the same study (e.g., $se_{1}$ and $se_{2}$) are correlated with each other ($\rho_{12}\neq0$), resulting non-zero covariances (e.g., $Cov[\nu_{1},\nu_{2}]=\rho_{12}se_{1}se_{2}$):  
 
 $$
 \boldsymbol{VCV} = 
@@ -1377,17 +1387,18 @@ se_{1}^2 & \rho_{12}se_{1}se_{2} & 0 \\
 0 & 0 & se_{3}^2
 \end{bmatrix}, (19)
 $$
-A rough rule can be used to check whether the sampling errors of your dataset are non-independent: when the calculation of effect sizes repeatedly uses the same animal data (e.g., shared control), the effect size's sampling errors will be correlated with each other (see Figure 4 in the main text for a nice visual summary). If your dataset has this type of dependency, a proper way is to construct a **VCV** matrix to account for it. In reality, constructing a **VCV** matrix is often challenging because the within-study sampling correlation (e.g., $\rho_{12}$) are not reported in the primary animal studies. We provide a simple solution to construct a **VCV** matrix (see 8.2 for implementation).
 
-## 9.2 Approximate a **VCV** matrix 
+A rough rule of thumb can be used to check whether the sampling errors of your dataset are non-independent: when the calculation of effect sizes repeatedly uses the same animal data (e.g., from a shared control group), the effect sizes' sampling errors will be correlated with each other (see Figure 4 in the main text for a nice visual summary). If your dataset has this type of dependency, a proper way is to construct a **VCV** matrix to account for it. In reality, constructing a **VCV** matrix is often challenging because the within-study sampling correlations (e.g., $\rho_{12}$) are not reported in the primary animal studies. We next provide a simple solution to construct a **VCV** matrix (see section 9.2 below for implementation).  
 
-Although we are not able to exactly construct a **VCV** matrix (due to missing $\rho$), we can impute a **VCV** matrix by assuming a constant sampling correlation $\rho$ across different studies ($\rho_{ik}=\cdots=\rho_{jh}\equiv\rho$). In our previous published meta-analyses, we often assume $\rho$ to be 0.5, which seems to be a plausible and safe assumption across many situations (see the main text for explanations). Importantly, you should conduct a sensitivity analysis to explore the extent to which the model coefficients (e.g., $\beta_{0}$) are sensitive to the choice of $\rho$ values. The imputation of a **VCV** matrix can be implemented by <code>impute_covariance_matrix()</code> function in <code>clubSandwich</code>. The argument <code>cluster</code> is used to specify the cluster or grouping variable (in our case, study identity *ArticleID*) within which effect sizes' sampling errors ($se_{[i]}=\sqrt{\nu_{[i]}}$) will be treated as correlated. The argument <code>r</code> is used to define the constant sampling correlation between $se_{[i]}$ ($\rho$). 
+## 9.2 Approximate a **VCV** matrix  
 
-We assume that the sampling errors ($se_{[i]}=\sqrt{\nu_{[i]}}$) within studies in @lagisz2020optimism's dataset are correlated with $\rho$ = 0.5. Let's use <code>vcalc()</code> to impute a **VCV** matrix:
+Although we are not able to construct an exact **VCV** matrix (due to missing $\rho$), we can impute a **VCV** matrix by assuming a constant sampling correlation $\rho$ across different studies ($\rho_{ik}=\cdots=\rho_{jh}\equiv\rho$). In our previous published meta-analyses, we often assume $\rho$ to be 0.5, which seems to be a plausible and safe assumption across many situations (see the main text for explanations). Importantly, you should conduct a sensitivity analysis to explore the extent to which the model coefficients (e.g., $\beta_{0}$) are sensitive to the choice of $\rho$ values. The imputation of a **VCV** matrix can be implemented by <code>impute_covariance_matrix()</code> function in <code>clubSandwich</code>. The argument <code>cluster</code> is used to specify the cluster or grouping variable (in our case, study identity *ArticleID*) within which effect sizes' sampling errors ($se_{[i]}=\sqrt{\nu_{[i]}}$) will be treated as correlated. The argument <code>r</code> is used to define the constant sampling correlation between $se_{[i]}$ ($\rho$).  
+
+We assume that the sampling errors ($se_{[i]}=\sqrt{\nu_{[i]}}$) within studies in @lagisz2020optimism's dataset are correlated with $\rho$ = 0.5. Let's use <code>vcalc()</code> to impute a **VCV** matrix:  
 
 <pre class="code rsplus">VCV <- impute_covariance_matrix(vi = dat_cognition$Vd, # sampling variance;
                                 cluster = dat_cognition$ArticleID, # define group variables;
-                                r = 0.5)</pre>
+                                r = 0.5)</pre>  
                            
 ```{r}
 # assume that the effect sizes within studies are correlated with rho = 0.5
@@ -1396,24 +1407,24 @@ VCV <- impute_covariance_matrix(vi = dat_cognition$Vd, #
                                 r = 0.5)
 ```
 
-Have a loot at the constructed **VCV** matrix for studies @bateson2007performance 2007 and @walker2014effect:
+Have a look at the constructed **VCV** matrix for studies @bateson2007performance 2007 and @walker2014effect:  
 
 ```{r}
 # examine the VCV matrix for studies Bateson et al., 2007 and Walker et al., 2014
 VCV[dat_cognition$ArticleID %in% c("Bateson2007","Walker2014"), dat_cognition$ArticleID %in% c("Bateson2007","Walker2014")]
 ```
 
-We can see that the **VCV** matrix is a block-diagonal covariance matrix, with the sampling variance ($se_{[i]}^2=\nu_{[i]}$) along the diagonal, and the covariance ($Cov[\nu_{i},\nu_{k}]=\rho_{ik}se_{i}se_{k}$) along the off-diagonal.
+We can see that the **VCV** matrix is a block-diagonal covariance matrix, with the sampling variance ($se_{[i]}^2=\nu_{[i]}$) along the diagonal, and the covariance ($Cov[\nu_{i},\nu_{k}]=\rho_{ik}se_{i}se_{k}$) along the off-diagonal.  
 
-Next to re-run the multilevel intercept-only meta-analytic model using the constructed **VCV** matrix (*VCV*) with: 
+Next, re-run the multilevel intercept-only meta-analytic model using the constructed **VCV** matrix (*VCV*) as: 
 
 <pre class="code rsplus">meta.study.effectID_VCV <- rma.mv(yi = d, 
                                   V = VCV, # replace sampling variance with a vcv matrix
                                   random = list(~ 1 | ArticleID, ~ 1 | EffectID), 
                                   data = dat_cognition, 
-                                  method = 'REML')</pre>
+                                  method = 'REML')</pre>  
 
-I guess you have already become familiar with the model outputs of <code>rma.mv</code> object:
+Examine the model outputs of <code>rma.mv</code> object:    
 
 ```{r}
 # run multilevel intetcept-only meta-analytic model without accounting for sampling covariance (correalted errors)
@@ -1456,10 +1467,10 @@ meta.study.effectID_VCV0.7 <- rma.mv(yi = d,
                                   method = 'REML')
 ```
 
-Nice! The overall effect (pooled effect size: $\beta_{0}$ = 0.1961, 95% CIs = [0.095 to 0.297], <code>p-value</code> = 0.0001) remains statistically significant after accounting for the covariance between effect sizes (i.e., correlated errors). Moreover, sensitivity analysis shows that the model estimates are robust to different values of $\rho$ (Table S6).
+Nice! The overall effect (pooled effect size: $\beta_{0}$ = 0.1961, 95% CIs = [0.095 to 0.297], <code>p-value</code> = 0.0001) remains statistically significant after accounting for the covariance between effect sizes (i.e., correlated errors). Moreover, sensitivity analysis shows that the model estimates are robust to different values of $\rho$ (Table S6).  
 
 ### Table S6
-The use of sensitivity analysis to examine the sensitivity of model estimates to the choice of $\rho$ values.
+The use of sensitivity analysis to examine the sensitivity of model estimates to the choice of $\rho$ values.  
 
 ```{r}
 t5 <- data.frame("Sampling correlation (ρ)" = c("Small correlation (0.2)", "Medium correlation (0.5)", "Large correlation (0.7)"),
@@ -1474,36 +1485,34 @@ names(t5) <- c("Sampling correlation (ρ)", "Overall effect (pooled SMD", "Stand
 DT::datatable(t(t5))
 ```
 
-# Section 10 – Apply cluster-robust inference methods {.tabset}
+# Section 10 – Apply cluster-robust inference methods {.tabset}   
 
-## 10.1 Concepts and rationale
+## 10.1 Concepts and rationale  
 
-There is an alternative method to account for handle statistical non-independence:variance estimation method (REV). As shown above, the multilevel model uses a multilevel random-effects structure to account for non-independence among effect sizes and a VCV matrix to account for non-independence among sampling errors. In contrast, REV does can estimate the sampling covariances from the meta-analytic data and subsequently adjust the associated standard errors (a so-called robust standard errors) to avoid inflated Type I error and p-value of model coefficients (e.g., overall effect or pooled effect size: $\beta_{0}$). 
+There is an alternative method to account for statistical non-independence: variance estimation method (REV). As shown above, the multilevel model uses a multilevel random-effects structure to account for non-independence among effect sizes and a VCV matrix to account for non-independence among sampling errors. In contrast, REV can estimate the sampling covariances from the meta-analytic data itself and subsequently adjust the associated standard errors (a so-called robust standard errors) to avoid inflated Type I error and p-value of model coefficients (e.g., overall effect or pooled effect size: $\beta_{0}$).  
 
-## 10.2 Meta-analysis with RVE with the multilevel model framework
+## 10.2 Meta-analysis with RVE with the multilevel model framework  
 
-Some researchers recommend using the multilevel model to account for data non-independence, while others endorse the use of RVE. Rather than choosing between the two, we prefer to take advantages of both (a so-called hybrid strategy): implementing a multilevel model in the framework of RVE. By doing so, RVE can provide us with the robust significance tests and confidence intervals for the model coefficients. Meanwhile, the multilevel model can provide us with extral model estimates, for example, the partition of variance components across levels (e.g., $\sigma_{between}^2$ and $\sigma_{within}^2$). This hybrid strategy seems very difficult to implement. Luck thing is the combination of <code>metafor</code> and <code>clubSandwich</code> packages provides an elegant solution to it.
-
-The implementation is very straightforward. First to construct a multilevel meta-analytic model via <code>rma.mv()</code> function in <code>metafor</code> package:
+Some researchers recommend using the multilevel model to account for data non-independence, while others endorse the use of RVE. Rather than choosing between the two, we prefer to take advantages of both (a so-called hybrid strategy): implementing a multilevel model in the framework of RVE. By doing so, RVE can provide us with the robust significance tests and confidence intervals for the model coefficients. Meanwhile, the multilevel model can provide us with extra model estimates, for example, the partitioning of variance components across levels (e.g., $\sigma_{between}^2$ and $\sigma_{within}^2$). This hybrid strategy seems very difficult to implement. Conveniently, the combination of <code>metafor</code> and <code>clubSandwich</code> packages provides an elegant solution.     
+The implementation is very straightforward. First, construct a multilevel meta-analytic model via <code>rma.mv()</code> function in <code>metafor</code> package:   
 
 <pre class="code rsplus">multilevl.ma.model <- rma.mv(yi = d, 
                              V = Vd, 
                              random = list(~ 1 | ArticleID, ~ 1 | EffectID),
                              data = dat_cognition, 
-                             method = 'REML')</pre>
+                             method = 'REML')</pre>   
 
-Then, use <code>coef_test()</code> function in <code>clubSandwich</code> package to compute the robust error and use it for the subsequent model inferences (i.e., significance tests):
+Then, use <code>coef_test()</code> function in <code>clubSandwich</code> package to compute the robust error and use it for the subsequent model inferences (i.e., significance tests):   
 
 <pre class="code rsplus">mod_RVE <- coef_test(multilevl.ma.model, # fitted multilevel model for which to make robust model inference (an object of class "rma.mv");
                      vcov = "CR2", # "bias-reduced linearization" is specified to approximate variance-covariance;
-                     test="Satterthwaite", # method for which small-sample correction to approximate;
+                     test = "Satterthwaite", # method for which small-sample correction to approximate;
                      cluster = dat_cognition$ArticleID
-                     )</pre>
+                     )</pre>  
                      
-As shown below, the outputs of the <code>coef_test()</code> function mainly focus on the model inferences - significance tests of the model coefficient (e.g., $\beta_{0}$):
+As shown below, the outputs of the <code>coef_test()</code> function mainly focus on the model inferences - significance tests of the model coefficient (e.g., $\beta_{0}$):  
 
 ```{r}
-
 # construct a multilevel meta-analytic model
 multilevl.ma.model <- rma.mv(yi = d, 
                              V = Vd, 
@@ -1514,20 +1523,20 @@ multilevl.ma.model <- rma.mv(yi = d,
 # make robust model inferences
 mod_RVE <- coef_test(multilevl.ma.model, # fitted multilevel model for which to make robust model inference (an object of class "rma.mv");
                      vcov = "CR2", # ‘bias-reduced linearization’ is specified to approximate variance-covariance;
-                     test="Satterthwaite", # method for which small-sample correction to approximate;
+                     test = "Satterthwaite", # method for which small-sample correction to approximate;
                      cluster = dat_cognition$ArticleID
                      )
 print(mod_RVE)
 ```
 
-# License
+# License  
 
-This documented is licensed under the following license: [CC Attribution-Noncommercial-Share Alike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en).
+This documented is licensed under the following license: [CC Attribution-Noncommercial-Share Alike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en).  
 
-# Software and package versions
+# Software and package versions  
 
 ```{r}
 sessionInfo() %>% pander()
 ```
 
-# References
+# References  
