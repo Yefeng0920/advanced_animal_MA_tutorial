@@ -48,3 +48,6 @@ Evolution & Ecology Research Centre, UNSW Data Science Hub;
 School of Biological, Earth and Environmental Sciences, University of New South Wales, Sydney, Australia
 
 Email: s.nakagawa@unsw.edu.au
+
+# Literature Survey
+A systematic literature showing the methodological and reporting practice of meta-analyses using animal models can be found at https://github.com/mlagisz/survey_neurobiology_MA
