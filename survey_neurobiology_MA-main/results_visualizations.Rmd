@@ -1,0 +1,661 @@
+---
+title: "Visualizations of survey results – meta-analytic practices in neurobiology animal studies"
+authors: "Y. Yang, M. Lagisz , S. Nakagawa"
+date: "July 2021"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    number_sections: false
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    fig.align: "center"
+    fig_caption: true
+    error: false
+    warning: false
+    message: false
+    echo: false
+    tidy: true
+    cache: true
+    df_print: paged
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+pacman::p_load(magrittr, tidyr, stringr, ggplot2, cowplot, tidyverse, here, readxl)
+#library(patchwork),  # for arranging ggplots in panels
+library(devtools)
+#devtools::install_github('Mikata-Project/ggthemr')
+#devtools::install_github('cttobin/ggthemr')
+library(ggthemr) #see https://github.com/Mikata-Project/ggthemr#palettes
+# to remove all ggthemr effects later:
+#ggthemr_reset()
+ggthemr('fresh') #select one ggplot theme to be used
+```
+
+
+#### Suevey questions
+Question | Answer options  
+---------| --------------------------  
+Q1 Is this formal meta-analysis (weighted) of non-human animal studies? | Formal MA; Bioinformatic MA (e.g. transcriptional and genome-wide association studies); Image MA (e.g. fMRI); Self-claiming as containing a meta-analysis (or meta-regression) but actually no formal meta-analysis/regression was conducted; unclear/other (add comment)  
+Q2 What is the type of effect sizes used?	| SMD (d, g, etc.); raw mean; correlation (r or Zr); Response Ratio (lnRR); variance (VR or lnCVR); 2 by 2 binary data (RR, OR); unclear/other (add comment)  
+Q3 What are the types of statistical models used for MA? | fixed-effect; random-effects; meta-regression (weighted linear-regression); multilevel; multivariate; unclear/other (add comment)  
+Q4 Does the paper account for heterogeneity? | not claiming to account for or explore heterogeneity; accounted by meta-regression, subgroup analysis or stratified MA; unclear/other (add comment)  
+Q5 What are the types of heterogeneity indices reported? | no heterogeneity indices reported; tau^2; Q; H; I^2; Prediction interval; unclear/other (add comment)  
+Q6-1 Does the study report N (the number of included studies) and k (the number of effect sizes)? | Both reported (add values to the comment); N reported (add values to the comment); k reported (add values to the comment); None reported (add comment)  
+Q6-2 | Enter included papers number (N) in the larges statistical analysis/model. If not reported, enter "NA"  
+Q6-3 | Enter included effect sizes number (k) in the larges statistical analysis/model. If not reported, enter "NA"  
+Q7 Does the study has the sign of data non-independence? | k/N=1 indicates independent effect sizes; k/N>1 indicates non-independent effect sizes; unclear/other (add comment)   
+Q8 Does the study acknowledge the issue of data non-independence? | Acknowledges effect sizes are not fully independent; Claiming effect sizes are independent; unclear/other (add comment)  
+Q9 Does the paper attempt to address any issues related to data non-independence? | paper explicitly models non-independence (e.g. using multilevel, multivariate models); paper deals with non-independence in other than modelling way (e.g. aggregation, sampling); ignoring or only partially dealing with non-independence (using fixed- or random-effects models for dependent effects); N/A (it is claimed all data are independent); unclear/other (add comment)  
+Q10 Does the paper report any approach to control for the sampling error non-independence (e.g. VCV matrix, sample size adjustment)? | VCV matrix; sample size adjustment; cluster-robust standard errors (sandwich robust variance estimation); N/A (it is claimed all data are independent); not controlling for the sampling error non-independence in any way; unclear/other (add comment)  
+Q11 What approaches were used to testing for publication bias | Not claiming to do tests for publication bias; Funnel plots; Regression-based methods (e.g., Egger's test); Fail-safe N; Trim-and-fill tests; Correlation-based methods (e.g., rank); P-value-based methods; Selection models; Normal quantile plot (Q-Q); Time-lag bias tests unclear/other (add comment)  
+Q12 What software was used for analyses? | RevMan; Stata packages; R packages; MetaWin; Comprehensive Meta-Analysis; unclear/other (add comment)  
+
+### Load extracted data
+```{r load data}
+rawdata <- read_excel(here("data", "MA_Neurobiology_Survey_final_clean.xlsx"), sheet = 1)
+#dim(rawdata) #78 papers 33 columns
+#names(rawdata)
+#glimpse(rawdata) # taking a quick look
+```
+
+### Included articles. 
+
+```{r data table included articles}
+#remove 4 excluded studies and remove all columns with "Comment", "checked" and then first 2 columns
+rawdata_incl <- rawdata %>% filter_at(6, all_vars(.=="Formal MA")) %>% select(-starts_with("Comment ")) 
+#make a table of included studies
+rawdata_incl2 <- select(rawdata_incl, c(2,4,3,1,5)) 
+names(rawdata_incl2) <- c("First_author", "Year", "Journal", "Title", "DOI")
+t_included <- rawdata_incl2 %>% DT::datatable(rownames = FALSE, width = "100%", options = list(dom = 't', scrollY = '700px', pageLength=20)) 
+t_included
+```
+
+### Preprocessing extracted data
+Data cleaning before plotting.      
+
+```{r clean data}
+#replace column names with shorter variable names for rawdata_incl
+names(rawdata_incl)  <- c("Title",
+                 "Author",
+                 "Journal",
+                 "Year",
+                 "DOI",
+                 "Meta_analysis",
+                 "Effect_size",
+                 "Statistical_models",
+                 "Heterogeneity_accounted",
+                 "Heterogeneity_indices",
+                 "Reporting_N_k",
+                 "N",
+                 "k",
+                 "Nonindependent_data",
+                 "Acknowledging_data_nonindependence",
+                 "Addressing_data_nonindependence",
+                 "Sampling_error_nonindependence",
+                 "testing_publication_bias",
+                 "Software_used")
+```
+
+
+### Visualizations
+
+##### Publication year
+
+```{r plot year, fig.dim = c(8, 2)}
+count(rawdata_incl, Year) %>%
+  mutate(class=factor(Year, levels=Year)) %>%
+  ggplot(aes(x = class, y = n)) +
+  geom_bar(stat = "identity", position = "dodge") +
+#  geom_text(aes(label=scales::comma(n)), hjust=0, nudge_y=1) +
+#  coord_flip() +
+  scale_y_continuous(breaks=seq(0,20,1)) +
+  labs(x="", y="Article count", title="When it was published?")
+# ggsave(filename = "./figures/FigS01.pdf",
+#        plot = plot_qual,
+#        height = 5, width = 10,
+#        device = cairo_pdf)
+```
+
+##### Publication journal
+
+```{r}
+count(rawdata_incl, Journal) %>%
+  arrange(n) %>%
+  mutate(class=factor(Journal, levels=Journal)) %>%
+  ggplot(aes(x = class, y = n)) +
+  geom_bar(stat = "identity", position = "dodge") +
+ # geom_text(aes(label=scales::comma(n)), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(breaks=seq(0,20,5)) +
+  labs(x="", y="Article count", title="Where it was published?") -> Journal.p
+# ggsave(filename = "./figures/FigS02.pdf",
+#        plot = plot_qual,
+#        height = 12, width = 10,
+#        device = cairo_pdf)
+```
+
+##### Effect size types
+
+```{r}
+#table(rawdata_incl$Effect_size) 
+Effect_size_sep <- separate_rows(rawdata_incl, Effect_size, sep = ";") #split rows with multiple values
+Effect_size_sep$Effect_size <- as.factor(Effect_size_sep$Effect_size)
+levels(Effect_size_sep$Effect_size) <- c("Dichotomous Variables (e.g., odds ratio)",
+                                         "Correlation between two variables (Zr)",
+                                         "Normalised mean difference (NMD)",
+                                         "Ratio of means (lnRR)",
+                                         "Standardised mean difference (SMD)",
+                                         "Other/unclear",
+                                         "Ratio of variances (lnVR and lnCVR)")
+### Count the relative frequency of factor levels
+Effect_size_sep %>%
+  group_by(Effect_size) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> Effect_size_sep_freq
+
+
+png(filename = "./effect_size_type.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+Effect_size_sep_freq %>% 
+  arrange(Freq) %>%
+  mutate(class=factor(Effect_size, levels=Effect_size)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title="(A) Effect sizes used") +
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> effect_size_type
+effect_size_type
+dev.off()
+
+```
+
+
+##### Statistical models
+
+```{r plot statistical models, fig.dim = c(8, 5)}
+#table(rawdata_incl$Statistical_models)
+Statistical_models_sep <- separate_rows(rawdata_incl, Statistical_models, sep = ";") #split rows with multiple values
+Statistical_models_sep$Statistical_models <- as.factor(Statistical_models_sep$Statistical_models)
+levels(Statistical_models_sep$Statistical_models) <- c("Fixed-effects model",
+                                                       "Meta-regression", 
+                                                       "Multilevel model",
+                                                       "Random-effects model", 
+                                                       "Other/unclear")
+
+### Count the relative frequency of factor levels
+Statistical_models_sep %>%
+  group_by(Statistical_models) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> Statistical_models_sep_freq
+
+png(filename = "./statistical_model_type.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+Statistical_models_sep_freq %>% 
+  arrange(Freq) %>%
+  mutate(class=factor(Statistical_models, levels=Statistical_models)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title="(B) Statistical models employed") +
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> statistical_model_type
+statistical_model_type
+dev.off()
+```
+
+
+##### Heterogeneity accounted
+
+```{r plot heterogeneity accounted, fig.dim = c(8, 5)}
+#table(rawdata_incl$Heterogeneity_accounted)
+rawdata_incl$Heterogeneity_accounted <- as.factor(rawdata_incl$Heterogeneity_accounted)
+levels(rawdata_incl$Heterogeneity_accounted) <- c("Meta-regression, subgroup \n analysis or stratified meta-analysis",
+                                                  "Not claiming to account for \n or explore heterogeneity",
+                                                  "Other/unclear")
+
+### Count the relative frequency of factor levels
+rawdata_incl %>%
+  group_by(Heterogeneity_accounted) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> rawdata_incl_freq
+
+
+png(filename = "./Heterogeneity_accounted_type.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+rawdata_incl_freq %>% 
+  arrange(Freq) %>%
+  mutate(class=factor(Heterogeneity_accounted, levels=Heterogeneity_accounted)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title="Heterogeneity accounted") +
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> Heterogeneity_accounted_type
+Heterogeneity_accounted_type
+dev.off()
+```
+
+
+##### Heterogeneity indices
+
+```{r plot heterogeneity indices, fig.dim = c(8, 5)}
+#table(rawdata_incl$Heterogeneity_indices) 
+Heterogeneity_indices_sep <- separate_rows(rawdata_incl, Heterogeneity_indices, sep = ";") #split rows with multiple values
+Heterogeneity_indices_sep$Heterogeneity_indices <- as.factor(Heterogeneity_indices_sep$Heterogeneity_indices)
+levels(Heterogeneity_indices_sep$Heterogeneity_indices) <- c("H2 statistic",
+                                                             "I2 statistic",
+                                                             "No heterogeneity \n indices reported",
+                                                             "Prediction interval",
+                                                             "Cohran's Q",
+                                                             "tau2 (variance of pooled effect size)",
+                                                             "Other/unclear")
+
+
+### Count the relative frequency of factor levels
+Heterogeneity_indices_sep %>%
+  group_by(Heterogeneity_indices) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> Heterogeneity_indices_sep_freq
+
+
+png(filename = "./Heterogeneity_indices_type.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+Heterogeneity_indices_sep_freq %>% 
+  arrange(Freq) %>%
+  mutate(class=factor(Heterogeneity_indices, levels=Heterogeneity_indices)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title="(C) Heterogeneity indices") +
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> Heterogeneity_indices_type
+Heterogeneity_indices_type
+dev.off()
+
+
+```
+
+Note: another index that was commonly mentioned was Chi^2.   
+
+
+##### Reporting N and k
+
+```{r plot reporting N and k, fig.dim = c(8, 5)}
+#table(rawdata_incl$Reporting_N_k)
+rawdata_incl$Reporting_N_k <- as.factor(rawdata_incl$Reporting_N_k)
+levels(rawdata_incl$Reporting_N_k) <- c("N and k reported",
+                                        "k reported",
+                                        "N reported",
+                                        "None reported")
+
+rawdata_incl %>%
+  group_by(Reporting_N_k) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> rawdata_incl_freq
+
+
+
+png(filename = "./Reporting_N_and_k.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+  rawdata_incl_freq %>%
+  arrange(Freq) %>%
+  mutate(class=factor(Reporting_N_k, levels=Reporting_N_k)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x="", y="Frequency (%)", title="", caption="") +
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        # plot.title = element_text(size = 14, colour = "black", hjust = -6)
+        ) -> Reporting_N_and_k
+  Reporting_N_and_k
+dev.off()
+
+```
+
+
+##### Reported N
+
+```{r reported N, fig.dim = c(8, 5)}
+#table(rawdata_incl$N)
+ 
+#calculate the percentage of N>50
+nrow(rawdata_incl[rawdata_incl$N>40, ])/nrow(rawdata_incl)
+N_data <- rawdata_incl  %>% filter(N != "NA")  %>% mutate(N = as.integer(N))
+
+ggplot(data=subset(rawdata_incl, !is.na(N)) , aes(x=as.numeric(N))) + 
+  geom_histogram(binwidth=10) +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x="", y="Article count", title="() Question 6-2")
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")
+        ) ->  Reported_N
+
+# ggsave(filename = "./figures/FigS08.pdf",
+#        plot = plot_qual,
+#        height = 8, width = 10,
+#        device = cairo_pdf)
+```
+
+
+##### Reported k
+
+```{r reported k, fig.dim = c(8, 5)}
+#table(rawdata_incl$k)
+k_data <- rawdata_incl  %>% filter(k != "NA") %>% filter(k != "2300000") %>% mutate(k = as.integer(k))
+
+#calculate the percentage of k>50
+nrow(k_data[k_data$k>50, ])/nrow(k_data)
+
+ggplot(data=k_data , aes(k)) + 
+  geom_histogram(binwidth=10) +
+  labs(x="", y="Article count", title="What was k (number of analysed effect sizes)?", caption="Note: one study with k>1000000 not shown")
+# ggsave(filename = "./figures/FigS09.pdf",
+#        plot = plot_qual,
+#        height = 8, width = 10,
+#        device = cairo_pdf)
+```
+
+
+##### Nonindependent data based on k/N ratio
+
+```{r plot Nonindependent_data, fig.dim = c(8, 3)}
+#table(rawdata_incl$Nonindependent_data)
+rawdata_incl$Nonindependent_data <- as.factor(rawdata_incl$Nonindependent_data)
+levels(rawdata_incl$Nonindependent_data) <- c("k/N = 1 indicates \n independent effect sizes", 
+                                              "k/N > 1 indicates \n non-independent effect sizes",
+                                              "Other/unclear")
+
+
+### Count the relative frequency of factor levels
+rawdata_incl %>%
+  group_by(Nonindependent_data) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> rawdata_incl_freq
+
+
+
+png(filename = "./non-independent_data.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+rawdata_incl_freq %>% 
+  arrange(Freq) %>%
+  mutate(class=factor(Nonindependent_data, levels=Nonindependent_data)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title=" (D) Sign of statistical non-independence") +
+  theme_classic() +
+  theme(axis.text= element_text(size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> non_independent_data
+  # annotate(geom = "text", x = 2, y = 65, label = paste("italic(k)==", round(median(k_data$k),0)), parse = TRUE, size = 4, colour = "red") +
+  # annotate(geom = "text", x = 2.3, y = 65, label = "median", size = 4, colour = "red") +
+  # annotate(geom = "text", x = 1.7, y = 65, label = paste("italic(N)==", round(median(N_data$N),0)), parse = TRUE, size = 4, colour = "red") +
+  # annotate(geom = "text", x = 1.5, y = 30, label = "median", size = 4, colour = "red") +
+ # annotate(geom = "text", x = 1.4, y = 65, label = paste("italic(k/N)==", round(median(k_data$k)/median(N_data$N),0)), parse = TRUE, size = 4, colour = "red") -> non_independent_data
+   # annotate(geom = "text", x = 1, y = 30, label = "median", size = 4, colour = "red")   
+non_independent_data
+dev.off()
+
+
+```
+
+
+##### Acknowledging non-independence of effect sizes 
+
+```{r plot acknowledging non-independence , fig.dim = c(8, 3.5)}
+#table(rawdata_incl$Acknowledging_data_nonindependence)
+rawdata_incl$Acknowledging_data_nonindependence <- as.factor(rawdata_incl$Acknowledging_data_nonindependence)
+levels(rawdata_incl$Acknowledging_data_nonindependence) <- c("Acknowledging effect sizes \n are not fully independent",
+                                                    "Claiming effect sizes \n are independent",
+                                                    "Other/unclear",
+                                                    "Other/unclear")
+
+
+rawdata_incl %>%
+  group_by(Acknowledging_data_nonindependence) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> rawdata_incl_freq
+
+png(filename = "./Acknowledging_non-independence.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+  rawdata_incl_freq %>%
+  arrange(Freq) %>%
+  mutate(class=factor(Acknowledging_data_nonindependence, levels=Acknowledging_data_nonindependence)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title="Acknowledging non-independence") +
+  theme_classic() +
+  theme(axis.text= element_text( size = 14, colour = "black"),
+        axis.title = element_blank(),
+        plot.title = element_text(size = 14, colour = "black")) -> Acknowledging_non_independence
+  Acknowledging_non_independence
+dev.off()
+
+
+```
+
+
+##### Addressing data non-independence  
+
+```{r plot adressing non-independence, fig.dim = c(8, 3.5)}
+#table(rawdata_incl$Addressing_data_nonindependence)
+rawdata_incl$Addressing_data_nonindependence <- as.factor(rawdata_incl$Addressing_data_nonindependence)
+levels(rawdata_incl$Addressing_data_nonindependence) <- c("Ignoring or only partially \n adressing via modeling",
+                                                          "N/A (it is claimed \n all data are independent)",
+                                                          "Adressing in other than \n modeling way",
+                                                          "Explicitly modeling \n non-independence",
+                                                          "Other/unclear")
+
+### Count the relative frequency of factor levels
+rawdata_incl %>%
+  group_by(Addressing_data_nonindependence) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> rawdata_incl_freq
+
+
+png(filename = "./Addressing_non-independence.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+  rawdata_incl_freq %>%
+  arrange(Freq) %>%
+  mutate(class=factor(Addressing_data_nonindependence, levels=Addressing_data_nonindependence)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x = "", y = "Frequency (%)", title = "(E) Addressing non-independent effect sizes") +
+  theme_classic() +
+  theme(axis.text= element_text(size = 14, colour = "black"),
+        # axis.title = element_blank(),
+        axis.title = element_text(size = 14, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> Addressing_non_independence
+  Addressing_non_independence
+dev.off()
+
+```
+
+
+##### Addressing sampling error non-independence  
+
+```{r plot adressing SE non-independence, fig.dim = c(8, 3.5)}
+#table(rawdata_incl$Sampling_error_nonindependence)
+rawdata_incl$Sampling_error_nonindependence <- as.factor(rawdata_incl$Sampling_error_nonindependence)
+levels(rawdata_incl$Sampling_error_nonindependence) <- c("Using robust \n variance estimation",
+                                                          "N/A (it is claimed\nall data are independent)",
+                                                          "Not adressing in any way",
+                                                          "Using sample size \n adjustment",
+                                                          "Other/unclear",
+                                                          "Using variance-covariance \n matrix")
+
+### Count the relative frequency of factor levels
+rawdata_incl %>%
+  group_by(Sampling_error_nonindependence) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> rawdata_incl_freq
+
+
+png(filename = "./Addressing_sampling_error.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+  rawdata_incl_freq %>%
+  arrange(Freq) %>%
+  mutate(class=factor(Sampling_error_nonindependence, levels=Sampling_error_nonindependence)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x = "", y="Frequency (%)", title = "Addressing correlated error") +
+  theme_classic() +
+  theme(axis.text= element_text(size = 14, colour = "black"),
+        # axis.title = element_blank(),
+        axis.title = element_text(size = 14, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> Addressing_sampling_error
+  Addressing_sampling_error
+dev.off()
+```
+
+
+##### Testing for publication bias
+
+```{r plot publication bias, fig.dim = c(8, 5)}
+#table(rawdata_incl$testing_publication_bias)
+testing_publication_bias_sep <- separate_rows(rawdata_incl, testing_publication_bias, sep = ";") #split rows with multiple values
+testing_publication_bias_sep$testing_publication_bias <- as.factor(testing_publication_bias_sep$testing_publication_bias)
+levels(testing_publication_bias_sep$testing_publication_bias) <- c("Correlation-based methods",
+                                                                   "Fail-safe N",
+                                                                   "Funnel plots",
+                                                                   "Not testing",
+                                                                   "Regression-based methods",
+                                                                   "Time-lag bias test",
+                                                                   "Trim-and-fill test",
+                                                                   "Other/unclear")
+
+testing_publication_bias_sep %>%
+  group_by(testing_publication_bias) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> testing_publication_bias_sep_freq
+
+
+png(filename = "./testing_publication_bias.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+  testing_publication_bias_sep_freq %>%
+  arrange(Freq) %>%
+  mutate(class=factor(testing_publication_bias, levels=testing_publication_bias)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x="", y="Frequency (%)", title = "(F) Publication bias test methods") +
+  theme_classic() +
+  theme(axis.text= element_text(size = 14, colour = "black"),
+        # axis.title = element_blank(),
+        axis.title = element_text(size = 14, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> testing_publication_bias
+  testing_publication_bias
+dev.off()
+```
+
+
+##### Software 
+
+```{r plot software, fig.dim = c(8, 4)}
+#table(rawdata_incl$Software_used)
+Software_used_sep <- separate_rows(rawdata_incl, Software_used, sep = ";") #split rows with multiple values
+Software_used_sep$Software_used <- as.factor(Software_used_sep$Software_used)
+levels(Software_used_sep$Software_used) <- c("Comprehensive \n Meta-Analysis", 
+                                             "R packages",
+                                             "Review Manager software \n for Cochrane Reviews",
+                                             "Stata packages",
+                                             "Other/unclear")
+
+
+Software_used_sep %>%
+  group_by(Software_used) %>%
+  summarise(n = n()) %>%
+  mutate(Freq = round(100*n/sum(n), 0)) -> Software_used_sep_freq
+
+
+png(filename = "./Q12_Software_used.png", width = 4, height = 4, units = "in", res = 400, type = "windows")
+  Software_used_sep_freq %>%
+  arrange(Freq) %>%
+  mutate(class=factor(Software_used, levels=Software_used)) %>%
+  ggplot() +
+  geom_col(aes(x = class, y = Freq), fill = "black") +
+  # geom_text(aes(label=as.integer(scales::comma(Freq))), hjust=0, nudge_y=1) +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x="", y="Frequency (%)", title = "Software used") +
+  theme_classic() +
+  theme(axis.text= element_text(size = 14, colour = "black"),
+        axis.title = element_text(size = 14, colour = "black"),
+        plot.title = element_text(size = 14, colour = "black")
+        ) -> Software_used
+  Software_used
+dev.off()
+
+
+```
+
+Retrieving additional info on other software and packages used from the comments field.   
+
+```{r other software packages used}
+#names(rawdata) collect information on packages and other software used  
+software <- rawdata$"Comment for Q14" %>% na.omit()
+software <- software[! software %in% c("no reporting", "not mentioned", "not reported", "not formal MA", "no MA of animal studies", "no formal MA of animal studies", "no formal MA", "no formal MA; no info", "no detailed packagesmentioned")] %>% tolower()
+software2 <- unlist(strsplit(software, ";" )) #split strings at ; 
+software2 <- trimws(software2, whitespace = "[\\h\\v]") #remove leading and trialing whitespace
+table(software2)  
+#count use of metafor and meta R packages
+#sum(software2=="metafor")
+#sum(software2=="meta")
+```
+
+R package *metafor* was the most used, with `r sum(software2=="metafor")` mentions. R package *meta came second, with `r sum(software2=="meta")` mentions.   
+
+
+### multi-panel figure
+```{r}
+library(cowplot)
+library(patchwork)
+
+png(filename = "./survey_results.png", width = 15, height = 14, units = "in", res = 400, type = "windows")
+effect_size_type + statistical_model_type + Heterogeneity_indices_type + non_independent_data + Addressing_non_independence +  testing_publication_bias + plot_layout(ncol = 2, nrow = 3)
+dev.off()
+
+```
+
