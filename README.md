@@ -1,6 +1,6 @@
-# General workflow for animal meta-analyses invovling dependent and heterogeneous effect sizes
+# Methodological guidance paper: current practice in meta-analysis of animal models, and underappreciated opportunities for using new effect sizes, multilevel models, meta-regression, multivariate models, and robust variance estimation
 
-A turorial on multilevel meta-analytic model, meta-analysis of variation, meta-regression, publication bias test and robust variance estimation.
+A turorial of advanced meta-analyses using animal data
 
 
 # Credit
