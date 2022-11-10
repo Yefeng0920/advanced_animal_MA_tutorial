@@ -1,4 +1,4 @@
-# Methodological guidance paper: current practice in meta-analysis of animal models, and underappreciated opportunities for using new effect sizes, multilevel models, meta-regression, multivariate models, and robust variance estimation
+# Methodological guidance paper: current practice in meta-analysis of animal models, and underappreciated opportunities for using new effect sizes, multilevel and multivariate models, meta-regression, and robust variance estimation
 
 ## A turorial of advanced meta-analyses using animal data
 
