@@ -1,9 +1,9 @@
 # Methodological guidance paper: current practice in meta-analysis of animal models, and underappreciated opportunities for using new effect sizes, multilevel models, meta-regression, multivariate models, and robust variance estimation
 
-A turorial of advanced meta-analyses using animal data
+## A turorial of advanced meta-analyses using animal data
 
 
-# Credit
+### Citation
 
 If this tutorial is useful to your meta-analysis, please cite the following paper:
 
@@ -49,5 +49,13 @@ School of Biological, Earth and Environmental Sciences, University of New South 
 
 Email: s.nakagawa@unsw.edu.au
 
-# Literature Survey
+### Credit
+
+We should acknowledge that this supplementary tutorial is heavily influenced by
+the open code from published papers in Prof. Shinichi Nakagawa's lab ([see full publication list](http://www.i-deel.org/publications.html)) and from  (Associate) Prof. Wolfgang Viechtbauer's versatile `R` package `metafor` (see the [documentation](https://wviechtb.github.io/metafor/). 
+
+### Updates
+
+This is an easy-to-implement tutorial, where you just need to have a slight modification to fit your own meta-analytic data. But we note that some arguments or script may be out of date because some packages are updating or changing in future. We will periodically update this tutorial to keep it working. The latest version of the tutorial can be found the GitHub repository (https://github.com/Yefeng0920/advanced_animal_MA_tutorial) and the Zenodo repository (https://zenodo.org/record/6622330#.YqAyH3ZBw2w)
+## Literature Survey
 A systematic literature showing the methodological and reporting practice of meta-analyses using animal models can be found at https://github.com/mlagisz/survey_neurobiology_MA
