@@ -1,8 +1,8 @@
 ---
-title: "General workflow for animal meta-analyses involving dependent and heterogeneous effect sizes"
-subtitle: "A turorial on multilevel meta-analytic model, meta-analysis of variation, meta-regression, publication bias test and robust variance estimation"
+title: "Methodological guidance paper: current practice in meta-analysis of animal models, and underappreciated opportunities for using new effect sizes, multilevel models, meta-regression, multivariate models, and robust variance estimation"
+subtitle: "A turorial of advanced meta-analyses using animal data"
 author: "Yefeng Yang, Malgorzata Lagisz, Shinichi Nakagawa"
-date: "last update June 2022"
+date: "last update Nov 2022"
 output:
   rmdformats::readthedown: 
 #  rmdformats::robobook:
@@ -27,8 +27,7 @@ csl: "./ref/neuroscience-and-biobehavioral-reviews.csl"
 link-citations: yes
 ---
 
-
-# Credit
+# Citation
 
 If this tutorial is useful to your meta-analysis, please cite the following paper:
 
@@ -74,9 +73,14 @@ School of Biological, Earth and Environmental Sciences, University of New South 
 
 Email: s.nakagawa@unsw.edu.au
 
+# Credit
+
+We should acknowledge that this supplementary tutorial is heavily influenced by
+the open code from published papers in Prof. Shinichi Nakagawa's lab ([see full publication list](http://www.i-deel.org/publications.html)) and from  (Associate) Prof. Wolfgang Viechtbauer's versatile `R` package `metafor` (see the [documentation](https://wviechtb.github.io/metafor/). 
+
 # Updates
 
-This is an easy-to-implement tutorial, where you just need to have a slight modification to fit your own meta-analytic data. But we note that some arguments or script may fail in future because some packages are updating or changing. We will periodically update this tutorial to keep it working. The latest version of the tutorial can be found the GitHub repository (https://github.com/Yefeng0920/advanced_animal_MA_tutorial) and the Zenodo repository (https://zenodo.org/record/6622330#.YqAyH3ZBw2w)
+This is an easy-to-implement tutorial, where you just need to have a slight modification to fit your own meta-analytic data. But we note that some arguments or script may be out of date because some packages are updating or changing in future. We will periodically update this tutorial to keep it working. The latest version of the tutorial can be found the GitHub repository (https://github.com/Yefeng0920/advanced_animal_MA_tutorial) and the Zenodo repository (https://zenodo.org/record/6622330#.YqAyH3ZBw2w)
 
 ```{r, include = FALSE}
 
@@ -447,6 +451,88 @@ This printed output section shows results of Cochran’s Q-test, which is used t
 
 As mentioned in the main text, the traditional statistical models used in animal data meta-analyses often fail to handle statistical non-independence, inflating type I error, distorting significance test results and leading to spurious conclusions. This worked example exactly shows this point. As in a random-effects meta-analysis, the first aim of a multilevel meta-analysis is often to estimate the overall effect across all animal studies (overall mean or pooled effect size; $\beta_{0}$ in Equation 2). Under <code>Model Results</code>, we can find the estimates we need for this aim: the magnitude of the overall effect ($\beta_{0}$), its  standard error (SE[$\beta_{0}$]), corresponding two-tailed p-value, and 95% confidence intervals (CIs). Our multilevel model revealed that animals exposed to SSRIs did not have a significantly less efficient sensory processing than those exposed to vehicle ($\beta_{0}$ = `r round(mod_multilevel_SMD$beta[1],3)`, 95% CIs = [`r round(mod_multilevel_SMD$ci.lb,3)` to `r round(mod_multilevel_SMD$ci.ub,3)`], p-value = `r round(mod_multilevel_SMD$pval,3)`).   
  
+```{r}
+#------------------------------------------------------------------------#
+# here we make a table to compare the parameter estimates and hypothesis tests of different methods (Table 1 in the main text)
+#------------------------------------------------------------------------#
+  
+# using the 'eliminating’ strategies - aggregating effect sizes or selecting a single effect size from each study
+# averaging
+## turn data frame into a 'escalc' object
+  
+agg.dat_sensory <- escalc(yi = SMD, vi = SMDV, data = dat_sensory2)
+## aggregate the effect sizes to the study level, assuming a compound symmetry structure for the observations (i.e., sampling variances) within studies with a rho of 0.5
+agg.dat_sensory2 <- aggregate(agg.dat_sensory, cluster = Study_ID, rho = 0.5)
+## fit aggregated estimates to a random-effects model 
+mod_agg_SMD <- metafor::rma(yi = yi, vi = vi, test = "t", data = agg.dat_sensory2) 
+
+# sampling
+## randomly select one observation from one study from data frame
+set.seed(2022) # for reproducibility purpose 
+rand.dat_sensory <- dat_sensory2 %>% group_by(Study_ID) %>% sample_n(1) #  plyr::ddply(dat_sensory2, .(Study_ID), function(x) x[sample(nrow(x),1),]) # need to library(plyr)
+## fit randomly-selected estimates to a random-effects model 
+mod_rand_SMD <- metafor::rma(yi = SMD, vi = SMDV, test = "t", data = rand.dat_sensory)
+
+# multilevel model without a VCV matrix
+mod_multilevel_SMD <- rma.mv(yi = SMD, V = SMDV, 
+                             random = list(~1 | Study_ID, ~1 | Obs_ID), 
+                             test = "t",
+                             method = "REML", 
+                             data = dat_sensory2,
+                             sparse = TRUE)
+
+# multilevel model with a VCV matrix
+## approximate the VCV matrix assuming the rho = 0.5
+SMDVCV <- vcalc(vi = SMDV, cluster = Study_ID, obs = Obs_ID, data = dat_sensory2, rho = 0.5)
+
+## fit model 
+mod_multilevel_SMD.VCV <- rma.mv(yi = SMD, V = SMDVCV, 
+                                 random = list(~1 | Study_ID, ~1 | Obs_ID), 
+                                 test = "t",
+                                 method = "REML", 
+                                 data = dat_sensory2,
+                                 sparse = TRUE)
+
+
+# multilevel model with a VCV matrix in the framework of robust variance estimation (REV)
+mod_multilevel_SMD.VCV.RVE <- robust(mod_multilevel_SMD.VCV, cluster = dat_sensory2$Study_ID, clubSandwich = TRUE)
+
+# multivariate model in the framework of REV
+mod_multivariate_SMD.VCV <- rma.mv(yi = SMD, V = SMDVCV, 
+                                   random = ~ Obs_ID | Study_ID, 
+                                   test = "t",
+                                   method = "REML", 
+                                   data = dat_sensory2,
+                                   sparse = TRUE)
+mod_multivariate_SMD.VCV.RVE <- robust(mod_multivariate_SMD.VCV, cluster = dat_sensory2$Study_ID, clubSandwich = TRUE)
+
+# compute multivariate I2 - based on typical within-study variance of the observed effect sizes (multivariate version I2 of Higgins & Thompson (2002))
+W <- solve(SMDVCV)
+X <- model.matrix(mod_multivariate_SMD.VCV)
+P <- W - W %*% X %*% solve(t(X) %*% W %*% X) %*% t(X) %*% W
+100 * mod_multivariate_SMD.VCV$tau2 / (mod_multivariate_SMD.VCV$tau2 + (mod_multivariate_SMD.VCV$k-mod_multivariate_SMD.VCV$p)/sum(diag(P)))
+
+# compute multivariate I2 - based on Jackson et al., 2012 (variance-covariance of the fixed effects or the model coefficients)
+## fit multivariate model with random effects
+mod_multivariate_SMD.VCV.R <- rma.mv(yi = SMD, V = SMDVCV, 
+                                     random = ~ Obs_ID | Study_ID, 
+                                     test = "t",
+                                     method = "REML", 
+                                     data = dat_sensory2,
+                                     sparse = TRUE)
+
+## fit multivariate model without random effects
+mod_multivariate_SMD.VCV.F <- rma.mv(yi = SMD, V = SMDVCV, 
+                                     test = "t",
+                                     method = "REML", 
+                                     data = dat_sensory2,
+                                     sparse = TRUE)
+## I2-type statistics
+(vcov(mod_multivariate_SMD.VCV.R, type = "fixed") - vcov(mod_multivariate_SMD.VCV.F, type = "fixed")) / vcov(mod_multivariate_SMD.VCV.R, type = "fixed") # or  mod_multivariate_SMD.VCV.R$vb or mod_multivariate_SMD.VCV.R$se^2
+
+```
+ 
+ 
 **Conflicting results between the multilevel model and random-effect model**  
 When comparing the results of our 3-level model with @ramsteijn2020perinatal's original results, we found that the conclusions of our 3-level model conflict with those reached by @ramsteijn2020perinatal (who used a simple random-effects model). @ramsteijn2020perinatal's analysis (page 62) indicates that SSRI exposure has a statistically significant negative effect on sensory processing in animals (our re-analysis when using a random-effects model also suggested this point). **However**, the multilevel model suggests that the SSRI-effect is actually statistically non-significant when accounting for data non-independence (Table S3).    
 
@@ -454,20 +540,20 @@ __Table S3__
 Results of the random-effects and 3-level meta-analytic models.   
 
 ```{r TableS3}
-t3 <- data.frame("Overall effect (pooled SMD)" = c(round(mod_random_SMD2$b[1],2), round(mod_multilevel_SMD$b[1],2)),
-             "Standard error" = c(round(mod_random_SMD2$se,2), round(mod_multilevel_SMD$se,2)),
-             "p-value" = c(round(mod_random_SMD2$pval,3), round(mod_multilevel_SMD$pval,3)),
-             "Lower CI" = c(round(mod_random_SMD2$ci.lb,2), round(mod_multilevel_SMD$ci.lb,2)),
-             "Upper CI" = c(round(mod_random_SMD2$ci.ub,2), round(mod_multilevel_SMD$ci.ub,2)),
-             "Between-study variance" = c(round(mod_random_SMD2$tau2,2), round(mod_multilevel_SMD$sigma2[1],2)),
-             "Within-study variance" = c(0, round(mod_multilevel_SMD$sigma2[2],2)),
-             "Between-study I2" = c(round(mod_random_SMD2$I2,2),round(i2_ml(mod_multilevel_SMD)[[2]]*100,2)),
-             "Within-study I2" = c(0,round(i2_ml(mod_multilevel_SMD)[[3]]*100,2)))
+t3 <- data.frame("Overall effect (pooled SMD)" = c(round(mod_random_SMD2$b[1],2), round(mod_agg_SMD$b[1],2), round(mod_rand_SMD$b[1],2), round(mod_multilevel_SMD$b[1],2)),
+             "Standard error" = c(round(mod_random_SMD2$se,2), round(mod_agg_SMD$se[1],2), round(mod_rand_SMD$se[1],2), round(mod_multilevel_SMD$se,2)),
+             "p-value" = c(round(mod_random_SMD2$pval,3), round(mod_agg_SMD$pval[1],2), round(mod_rand_SMD$pval[1],2), round(mod_multilevel_SMD$pval,3)),
+             "Lower CI" = c(round(mod_random_SMD2$ci.lb,2), round(mod_agg_SMD$ci.lb[1],2), round(mod_rand_SMD$ci.lb[1],2), round(mod_multilevel_SMD$ci.lb,2)),
+             "Upper CI" = c(round(mod_random_SMD2$ci.ub,2), round(mod_agg_SMD$ci.ub[1],2), round(mod_rand_SMD$ci.ub[1],2), round(mod_multilevel_SMD$ci.ub,2)),
+             "Between-study variance" = c(round(mod_random_SMD2$tau2,2), round(mod_agg_SMD$tau2,2), round(mod_rand_SMD$tau2,2), round(mod_multilevel_SMD$sigma2[1],2)),
+             "Within-study variance" = c(0, 0, 0, round(mod_multilevel_SMD$sigma2[2],2)),
+             "Between-study I2" = c(round(mod_random_SMD2$I2,2), round(mod_agg_SMD$I2,2), round(mod_rand_SMD$I2,2), round(i2_ml(mod_multilevel_SMD)[[2]],2)),
+             "Within-study I2" = c(0,0,0,round(i2_ml(mod_multilevel_SMD)[[3]],2)))
 
 colnames(t3) <- c("Overall effect (pooled SMD)", "Standard error", "p-value", "Lower CI", "Upper CI", "Between-study variance", "Within-study variance", "Between-study I2", "Within-study I2")
 
 t3_2 <- t(t3) %>% as.data.frame()
-colnames(t3_2) <- c("Random-effects model", "Multi-level model")
+colnames(t3_2) <- c("Random-effects model", "Aggregation", "Random-select", "Multi-level model")
 
 t3_2 %>% DT::datatable()
 ```
@@ -511,7 +597,7 @@ i2_ml(mod_multilevel_SMD)
 
 ## 3.2 Handle multiple sources of heterogeneity to avoid confounded heterogeneity  
 
-As shown above, the <code>i2_ml()</code> will calculate $I^2$ statistic for each random-effects corresponding to each variance component. Table S3 above shows the distinctions between the random-effects model and multilevel model in terms of heterogeneity. We can see that between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model are overestimated. The two values in the 3-level model are almost half of those in the random-effects model. This is because the random-effects model incorrectly allocates within-study variance ($\sigma^2_{within}$) and heterogeneity ($I^2_{within}$) to between-study variance ($\sigma^2_{betwween}$) and heterogeneity ($I^2_{between}$). You can easily corroborate this point by comparing the between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model with the total variance ($\sigma^2_{total}$) and heterogeneity ($I^2_{total}$) in the 3-level model (i.e. the sum of these values in within- and between-study level). This means that using the random-effects model to fit this dataset leads to a wrong conclusion that the study level has a high amount of heterogeneity ($I^2_{between}$ = 69.38%). However, the study level only explains 27.17% of the total heterogeneity. The remaining 29.21% of the total heterogeneity is due to the within-study level (effect-size/observational level).  
+As shown above, the <code>i2_ml()</code> will calculate $I^2$ statistic for each random-effects corresponding to each variance component. Table S3 above shows the distinctions between the random-effects model and multilevel model in terms of heterogeneity. We can see that between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model are overestimated. The two values in the 3-level model are almost half of those in the random-effects model. This is because the random-effects model incorrectly allocates within-study variance ($\sigma^2_{within}$) and heterogeneity ($I^2_{within}$) to between-study variance ($\sigma^2_{betwween}$) and heterogeneity ($I^2_{between}$). You can easily corroborate this point by comparing the between-study variance ($\tau^2$) and heterogeneity ($I^2_{between}$) in the random-effects model with the total variance ($\sigma^2_{total}$) and heterogeneity ($I^2_{total}$) in the 3-level model (i.e. the sum of these values in within- and between-study level). This means that using the random-effects model to fit this dataset leads to a wrong conclusion that the study level has a high amount of heterogeneity ($I^2_{between}$ = 69.38%). However, the study level only explains 27.17% of the total heterogeneity. The remaining 49.21% of the total heterogeneity is due to the within-study level (effect-size/observational level).  
 
 ## 3.3 Compute prediction intervals   
 
@@ -1380,7 +1466,7 @@ $$
 
 A rough rule of thumb can be used to check whether the sampling errors of your dataset are non-independent: when the calculation of effect sizes repeatedly uses the same animal data (e.g., from a shared control group), the effect sizes' sampling errors will be correlated with each other (see Figure 4 in the main text for a nice visual summary). If your dataset has this type of dependency, a proper way is to construct a **VCV** matrix to account for it. In reality, constructing a **VCV** matrix is often challenging because the within-study sampling correlations (e.g., $\rho_{12}$) are not reported in the primary animal studies. We next provide a simple solution to construct a **VCV** matrix (see section 9.2 below for implementation).  
 
-## 9.2 Impute a **VCV** matrix  
+## 9.2 Impute a VCV matrix  
 
 Although we are not able to construct an exact **VCV** matrix (due to missing $\rho$), we can impute a **VCV** matrix by assuming a constant sampling correlation $\rho$ across different studies ($\rho_{ik}=\cdots=\rho_{jh}\equiv\rho$). In our previous published meta-analyses, we often assume $\rho$ to be 0.5, which seems to be a plausible and safe assumption across many situations (see the main text for explanations). Importantly, you should conduct a sensitivity analysis to explore the extent to which the model coefficients (e.g., $\beta_{0}$) are sensitive to the choice of $\rho$ values. The imputation of a **VCV** matrix can be implemented by <code>impute_covariance_matrix()</code> function in <code>clubSandwich</code>. The argument <code>cluster</code> is used to specify the cluster or grouping variable (in our case, study identity *ArticleID*) within which effect sizes' sampling errors ($se_{[i]}=\sqrt{\nu_{[i]}}$) will be treated as correlated. The argument <code>r</code> is used to define a constant sampling correlation between $se_{[i]}$ ($\rho$).  
 
@@ -1516,13 +1602,57 @@ colnames(t6) <- c("Sampling correlation (ρ)", "Overall effect (pooled SMD)", "S
 t6 %>% kable(digits=c(1,2,1,4,2,2))
 ```
 
-# Section 10 – Apply cluster-robust inference methods {.tabset}   
 
-## 10.1 Concepts and rationale  
+# Section 10 – Fit a multivariate meta-analytic model {.tabset}  
+
+## 10.1 Concepts and rationale
+
+Multivariate models can model two or more different types of response variables/outcomes with studies. So multivariate models cal account for the non-independence due to the multivariate effect sizes (i.e., correlations of true effects and sampling variances). It is worth noting that when dealing non-independence, multilevel models and multivariate models are identical if assuming correlations of the underlying true effects follow a compound-symmetric structure (heterogeneous variances and covariances/correlations of random effects). But multivariate models allow more flexibility in certain circumstances. For example, if we assume the random effects have an unstructured variance-covariance matrix, we can make the amount of variability to differ for different outcomes/response variables (e.g., for depression and anxiety) within the studies. We acknowledge that multilevel model is not capable of settling this. But in such a case, we would like to call it as a 'multi-response' or 'multi-outcome' model as 'multivariate' is really confusing here. 
+
+## 10.2 Construct a multivariate meta-analytic model
+
+Under the dependency condition where the same outcome (e.g., depression) is measured at different measurement occasions, namely, multiple effect sizes are different observations of the effect corresponding the same outcome (e.g., depression), a multilevel model we fitted in **Section 2 – Fit a multilevel meta-analytic model to estimate overall pooled effect** can be reformulated via multivariate parameterization. Below, we illustrate this case. We are not going to illustrate how to use a multivariate model to account for the dependency of effect sizes due to the different outcomes measured within the same study. Because such a multivariate data structure is not a typical one in animal meta-analysis. 
+
+A multivariate model with random effects taking on a compound-symmetric structure can be fitted with:
+<pre class="code rsplus">
+mod_multivariate <- rma.mv(yi = d, 
+                           V = Vd, 
+                           random = ~ EffectID | ArticleID, 
+                           method = "REML", 
+                           data = dat_cognition)
+</pre>
+```{r}
+# multivariate model
+mod_multivariate <- rma.mv(yi = d, 
+                           V = Vd, 
+                           random = ~ EffectID | ArticleID, 
+                           method = "REML", 
+                           data = dat_cognition,
+                           sparse = TRUE)
+summary(mod_multivariate)
+```
+
+As we said, all the parameter estimates and model fitting statistics are identical to a multilevel model:
+
+```{r}
+# multilevel model
+mod_multilevel <- rma.mv(yi = d, 
+                         V = Vd, 
+                         random = ~ 1 | ArticleID/EffectID, 
+                         method = "REML", 
+                         data = dat_cognition,
+                         sparse = TRUE)
+summary(mod_multilevel)
+```
+
+
+# Section 11 – Apply cluster-robust inference methods {.tabset}   
+
+## 11.1 Concepts and rationale  
 
 There is an alternative method to account for statistical non-independence: variance estimation method (REV). As shown above, the multilevel model uses a multilevel random-effects structure to account for non-independence among effect sizes and a VCV matrix to account for non-independence among sampling errors. In contrast, REV can estimate the sampling covariances from the meta-analytic data itself and subsequently adjust the associated standard errors (a so-called robust standard errors) to avoid inflated Type I error and p-value of model coefficients (e.g., overall effect or pooled effect size: $\beta_{0}$).  
 
-## 10.2 Meta-analysis with RVE with the multilevel model framework  
+## 11.2 Meta-analysis with RVE with the multilevel model framework  
 
 Some researchers recommend using the multilevel model to account for data non-independence, while others endorse the use of RVE. Rather than choosing between the two, we prefer to take advantages of both (a so-called hybrid strategy): implementing a multilevel model in the framework of RVE. By doing so, RVE can provide us with the robust significance tests and confidence intervals for the model coefficients. Meanwhile, the multilevel model can provide us with extra model estimates, for example, the partitioning of variance components across levels (e.g., $\sigma_{between}^2$ and $\sigma_{within}^2$). This hybrid strategy seems very difficult to implement. Conveniently, the combination of <code>metafor</code> and <code>clubSandwich</code> packages provides an elegant solution.     
 The implementation is very straightforward. First, construct a multilevel meta-analytic model via <code>rma.mv()</code> function in <code>metafor</code> package:   
@@ -1558,6 +1688,98 @@ mod_RVE <- coef_test(multilevl.ma.model, # fitted multilevel model for which to 
                      cluster = dat_cognition$ArticleID
                      )
 print(mod_RVE)
+```
+
+
+# Section 12 - Addition after peer review
+
+During peer review, our reviewers gave thoughtful comments and suggestion. As inspired by one of the useful comment, we decided to add multivariate model to our paper. As a complement, we added the corresponding illustration in this section. However, we did not find any available dataset to show multivariate model (this is also a part of reason why we did not include multivariate model in our original paper). Here, for illustrative purpose, we fabricated a fictitious dataset.
+
+This fictitious dataset looks like:
+
+<pre class="code rsplus">
+dat_mv <- data.frame(assay = c(1,1,2,2,3,3,4,4,5,5),
+                     studyID = c("s1","s1","s2","s2","s3","s3","s4","s4","s5","s5"),
+                     outcome = rep(c("sensory", "anxiety"),5),
+                     yi = c(0.37,-0.22,0.1,-0.5,0.3,-0.02,0.16,-0.21,0.46,-0.29),
+                     vi = c(0.0065,0.0067,0.0047,0.0007,0.0011,0.0004,0.0019,0.0005,0.0048,0.0204),
+                     v1i = c(0.0065,0.0020,0.0047,0.0008,0.0011,0.0006,0.0019,0.0008,0.00048,0.00062),
+                     v2i = c(0.002,0.0067,0.0008,0.0007,0.0006,0.0004,0.0008,0.0005,0.0062,0.00204))
+</pre>
+
+```{r}
+# fabricate a dataset with multivariate effect sizes
+dat_mv <- data.frame(assay = c(1,1,2,2,3,3,4,4,5,5),
+                     studyID = c("s1","s1","s2","s2","s3","s3","s4","s4","s5","s5"),
+                     outcome = rep(c("sensory", "anxiety"),5),
+                     yi = c(0.37,-0.22,0.1,-0.5,0.3,-0.02,0.16,-0.21,0.46,-0.29),
+                     vi = c(0.0065,0.0067,0.0047,0.0007,0.0011,0.0004,0.0019,0.0005,0.0048,0.0204),
+                     v1i = c(0.0065,0.0020,0.0047,0.0008,0.0011,0.0006,0.0019,0.0008,0.00048,0.00062),
+                     v2i = c(0.002,0.0067,0.0008,0.0007,0.0006,0.0004,0.0008,0.0005,0.0062,0.00204))
+```
+
+Before we can proceed with the model fitting, we need to construct the full (block-diagonal) variance-covariance for all studies from these two variables. We can do this using the vcalc() function in one line of code:
+
+<pre class="code rsplus">
+VCV <- vcalc(vi = 1, cluster = studyID, rvars = c(v1i, v2i), data = dat_mv)
+</pre>
+
+Then, fit the multivariate random-effects model with:
+<pre class="code rsplus">
+model_MV <- rma.mv(yi = yi, 
+                   V = VCV, 
+                   random = ~ outcome | assay, 
+                   struct="UN",
+                   mods = ~ outcome - 1,  
+                   method = "REML",
+                   test = "t",
+                   data = dat_mv)
+</pre>
+```{r}
+# construct a VCV matrix 
+VCV <- vcalc(vi = 1, cluster = studyID, rvars = c(v1i, v2i), data = dat_mv)
+
+# fit a multivariate model
+model_MV <- rma.mv(yi = yi, 
+                   V = VCV, 
+                   random = ~ outcome | assay, 
+                   struct="UN",
+                   mods = ~ outcome - 1,  
+                   method = "REML",
+                   test = "t",
+                   data = dat_mv)
+
+# BoS
+## fit a univariate model for outcome
+## create unique ID for each observation
+## dat_mv$obsID <- 1:nrow(dat_mv)
+# model_UV_sensory <- rma(yi,vi,method="REML",test="t",data=dat_mv, subset = outcome == "sensory") # rma.mv(yi = yi, V = vi,  random = ~ 1 | obsID, method = "REML", test = "t", data = dat_mv, subset = outcome == "sensory") 
+# model_UV_anxiety <- rma(yi,vi,method="REML",test="t",data=dat_mv, subset = outcome == "anxiety") 
+
+## calculate
+#Bos_sensory <- (model_UV_sensory$se-model_MV$se[2])/(model_UV_sensory$se) # a negative value. which means no strength has been borrowed
+#Bos_anxiety <- (model_UV_anxiety$se-model_MV$se[1])/(model_UV_anxiety$se)
+```
+
+The output looks like:
+
+<pre class="code rsplus">
+summary(model_MV)
+</pre>
+```{r}
+summary(model_MV)
+```
+
+We see that a multivariate random-effects model can meta-analyze the two outcomes simultaneously. Moreover, the correlated random effects structure allows that variance of each outcome to vary.
+
+Guide against the misspecified VCV matrix:
+
+<pre class="code rsplus">
+robust(model_MV, cluster = studyID, clubSandwich = TRUE)
+</pre>
+```{r}
+# guide against model specification
+robust(model_MV, cluster = studyID, clubSandwich = TRUE)
 ```
 
 # License  
