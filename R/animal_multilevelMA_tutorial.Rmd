@@ -1,6 +1,6 @@
 ---
-title: "Methodological guidance paper: current practice in meta-analysis of animal models, and underappreciated opportunities for using new effect sizes, multilevel models, meta-regression, multivariate models, and robust variance estimation"
-subtitle: "A turorial of advanced meta-analyses using animal data"
+title: "A turorial of advanced methods for the meta-analyses of animal models"
+subtitle: "Illustration of multilevel model, meta-regression, multivariate model and robust variance estimation"
 author: "Yefeng Yang, Malgorzata Lagisz, Shinichi Nakagawa"
 date: "last update Nov 2022"
 output:
