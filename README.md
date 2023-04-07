@@ -52,7 +52,7 @@ Email: s.nakagawa@unsw.edu.au
 ### Credit
 
 We should acknowledge that this supplementary tutorial is heavily influenced by
-the open code from published papers in Prof. Shinichi Nakagawa's lab ([see full publication list](http://www.i-deel.org/publications.html)) and from  (Associate) Prof. Wolfgang Viechtbauer's versatile `R` package `metafor` (see the [documentation](https://wviechtb.github.io/metafor/). 
+the open code from published papers in Prof. Shinichi Nakagawa's lab ([see full publication list](http://www.i-deel.org/publications.html)) and from  (Associate) Prof. Wolfgang Viechtbauer's versatile `R` package `metafor` (see the [documentation](https://wviechtb.github.io/metafor/)). 
 
 ### Updates
 
